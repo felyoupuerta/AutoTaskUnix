@@ -57,6 +57,41 @@ void* server_loop(void* arg)
             printf("Durmiendo %d\n",i);
             sleep(1);
         }
+        
+        //Inicializamos la estructura de REQUEST de tasks declarada en --> protocol.h
+        Request req; 
+        
+        ssize_t bytes_leidos = read(cli_fd,&req,sizeof(req));
+        
+        if(bytes_leidos <= 0)
+        {
+            perror("[ERROR] al recibir los datos por el socket\n");
+            close(cli_fd);
+        }
+        switch(req.comando)
+        {
+            case CMD_LIST:
+                printf("[SERVER] HAS ELEGIDO CMD_LIST");
+                break;
+            case CMD_ADD:
+                printf("[SERVER] HAS ELEGIDO CMD_ADD");
+                break;
+            case CMD_RUN:
+                printf("[SERVER] HAS ELEGIDO CMD_RUN");
+                break;
+            default:
+                printf("[SERVER] COMANDO DESCONOCIDO");
+                break;
+        }
+        close(cli_fd);
+
+         
+
+
+
+
+
+
     }
     return 0;
 }

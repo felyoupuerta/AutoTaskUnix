@@ -1,34 +1,15 @@
 #!/bin/bash
-# ==========================================
-# Git Helper 
-# Felipe Angeriz Estefanell
-#
-#23/06/2026
-# ==========================================
 
-
-echo "=================================="
-echo "        Git Helper"
-echo "=================================="
-
-
-if ! git rev-parse --is-inside-work-tree > /dev/null 2>&1
-then
-    echo " No estás dentro de un repositorio Git"
-    exit 1
-fi
-
-
+REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
+cd "$REPO_ROOT" || exit 1
 
 CURRENT_BRANCH=$(git branch --show-current)
 
+echo "=================================="
+echo "Git Helper"
+echo "=================================="
 echo ""
 echo "Rama actual: $CURRENT_BRANCH"
-echo ""
-
-
-
-echo "¿Qué quieres hacer?"
 echo ""
 echo "1) Subir cambios a DEV"
 echo "2) Pasar DEV a MAIN"
@@ -37,180 +18,52 @@ echo ""
 
 read -p "Opción: " OPTION
 
-
-
 case $OPTION in
 
-
-
 1)
-
-    echo ""
-    echo "Preparando subida a DEV"
-    echo ""
-
-
-    # Crear DEV si no existe
-    if git show-ref --verify --quiet refs/heads/DEV
-    then
-        echo "Rama DEV encontrada"
+    if git show-ref --verify --quiet refs/heads/DEV; then
         git checkout DEV
     else
-        echo "Rama DEV no existe"
-        echo "Creando DEV..."
         git checkout -b DEV
     fi
 
+    git add -A
 
-
-    echo ""
-    echo "Archivos modificados:"
-    echo ""
-
-    git status
-
-
-    echo ""
+    if git diff --cached --quiet; then
+        echo "No hay cambios"
+        exit 1
+    fi
 
     read -p "Mensaje del commit: " MESSAGE
 
-
-    if [ -z "$MESSAGE" ]
-    then
-        echo "El commit necesita un mensaje"
+    if [ -z "$MESSAGE" ]; then
         exit 1
     fi
 
-
-
-    echo ""
-    echo "Añadiendo archivos..."
-
-    git add .
-
-
-
-    echo ""
-    echo "Creando commit..."
-
-    if git commit -m "$MESSAGE"
-    then
-        echo "Commit creado"
-    else
-        echo "Error creando commit"
-        exit 1
-    fi
-
-
-
-    echo ""
-    echo "Subiendo a DEV..."
-
-
-    if git push origin DEV
-    then
-        echo ""
-        echo "Cambios subidos correctamente a DEV"
-    else
-        echo ""
-        echo "Error subiendo a DEV"
-        exit 1
-    fi
-
-
+    git commit -m "$MESSAGE" || exit 1
+    git push origin DEV || exit 1
 ;;
 
-
-
 2)
+    read -p "Confirmar merge DEV a main (s/n): " CONFIRM
 
-    echo ""
-    echo "Vas a fusionar DEV → MAIN"
-    echo ""
-
-    read -p "¿Continuar? (s/n): " CONFIRM
-
-
-    if [[ "$CONFIRM" != "s" ]]
-    then
-        echo "Cancelado"
+    if [ "$CONFIRM" != "s" ]; then
         exit 0
     fi
 
+    git checkout main || exit 1
+    git pull origin main || exit 1
 
-
-    # Verificar DEV
-
-    if git show-ref --verify --quiet refs/heads/DEV
-    then
-        echo " DEV existe"
-    else
-        echo " No existe la rama DEV"
-        exit 1
-    fi
-
-
-
-    echo ""
-    echo "Cambiando a main..."
-
-    git checkout main
-
-
-
-    echo ""
-    echo "Actualizando main..."
-
-    git pull origin main
-
-
-
-    echo ""
-    echo "Fusionando DEV..."
-
-    if git merge DEV
-    then
-        echo " Merge correcto"
-    else
-        echo " Conflicto en merge"
-        echo "Resuelve los conflictos y vuelve a ejecutar"
-        exit 1
-    fi
-
-
-
-    echo ""
-    echo "Subiendo MAIN..."
-
-
-    if git push origin main
-    then
-        echo ""
-        echo "✅ DEV fusionado en MAIN correctamente"
-    else
-        echo ""
-        echo " Error subiendo MAIN"
-        exit 1
-    fi
-
-
+    git merge DEV || exit 1
+    git push origin main || exit 1
 ;;
-
-
 
 3)
-
-    echo "Saliendo..."
     exit 0
-
 ;;
 
-
-
 *)
-
-    echo " Opción inválida"
-
+    exit 1
 ;;
 
 esac 
