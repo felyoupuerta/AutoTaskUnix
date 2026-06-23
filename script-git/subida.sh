@@ -10,19 +10,22 @@ echo "=================================="
 echo "        Git Helper"
 echo "=================================="
 
-# Verificar que estamos en un repo git
-if ! git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
+
+# Verificar que estamos dentro de un repo git
+if ! git rev-parse --is-inside-work-tree > /dev/null 2>&1
+then
     echo "❌ No estás dentro de un repositorio Git"
     exit 1
 fi
 
 
-# Mostrar rama actual
-BRANCH=$(git branch --show-current)
+
+CURRENT_BRANCH=$(git branch --show-current)
 
 echo ""
-echo "Rama actual: $BRANCH"
+echo "Rama actual: $CURRENT_BRANCH"
 echo ""
+
 
 
 echo "¿Qué quieres hacer?"
@@ -39,93 +42,160 @@ read -p "Opción: " OPTION
 case $OPTION in
 
 
+
 1)
 
     echo ""
     echo "➡️  Preparando subida a DEV"
+    echo ""
 
-    # Cambiar a DEV
-    git checkout DEV
+
+    # Crear DEV si no existe
+    if git show-ref --verify --quiet refs/heads/DEV
+    then
+        echo "✔ Rama DEV encontrada"
+        git checkout DEV
+    else
+        echo "⚠️ Rama DEV no existe"
+        echo "Creando DEV..."
+        git checkout -b DEV
+    fi
+
+
 
     echo ""
     echo "Archivos modificados:"
+    echo ""
+
     git status
 
 
     echo ""
+
     read -p "Mensaje del commit: " MESSAGE
 
 
-    if [ -z "$MESSAGE" ]; then
+    if [ -z "$MESSAGE" ]
+    then
         echo "❌ El commit necesita un mensaje"
         exit 1
     fi
 
 
+
     echo ""
     echo "Añadiendo archivos..."
+
     git add .
 
 
+
+    echo ""
     echo "Creando commit..."
-    git commit -m "$MESSAGE"
+
+    if git commit -m "$MESSAGE"
+    then
+        echo "✔ Commit creado"
+    else
+        echo "❌ Error creando commit"
+        exit 1
+    fi
+
 
 
     echo ""
     echo "Subiendo a DEV..."
-    git push origin DEV
 
 
-    echo ""
-    echo "✅ Cambios subidos correctamente a DEV"
+    if git push origin DEV
+    then
+        echo ""
+        echo "✅ Cambios subidos correctamente a DEV"
+    else
+        echo ""
+        echo "❌ Error subiendo a DEV"
+        exit 1
+    fi
+
 
 ;;
-
-
 
 
 
 2)
 
     echo ""
-    echo "⚠️  Vas a fusionar DEV → MAIN"
+    echo "⚠️ Vas a fusionar DEV → MAIN"
+    echo ""
+
     read -p "¿Continuar? (s/n): " CONFIRM
 
 
-    if [[ "$CONFIRM" != "s" ]]; then
+    if [[ "$CONFIRM" != "s" ]]
+    then
         echo "Cancelado"
         exit 0
     fi
 
 
+
+    # Verificar DEV
+
+    if git show-ref --verify --quiet refs/heads/DEV
+    then
+        echo "✔ DEV existe"
+    else
+        echo "❌ No existe la rama DEV"
+        exit 1
+    fi
+
+
+
     echo ""
-    echo "Cambiando a MAIN..."
+    echo "Cambiando a main..."
+
     git checkout main
 
 
+
     echo ""
-    echo "Actualizando MAIN..."
+    echo "Actualizando main..."
+
     git pull origin main
 
 
 
     echo ""
     echo "Fusionando DEV..."
-    git merge DEV
+
+    if git merge DEV
+    then
+        echo "✔ Merge correcto"
+    else
+        echo "❌ Conflicto en merge"
+        echo "Resuelve los conflictos y vuelve a ejecutar"
+        exit 1
+    fi
 
 
 
     echo ""
     echo "Subiendo MAIN..."
-    git push origin main
 
 
-
-    echo ""
-    echo "✅ DEV fusionado correctamente en MAIN"
+    if git push origin main
+    then
+        echo ""
+        echo "✅ DEV fusionado en MAIN correctamente"
+    else
+        echo ""
+        echo "❌ Error subiendo MAIN"
+        exit 1
+    fi
 
 
 ;;
+
 
 
 3)
@@ -136,10 +206,11 @@ case $OPTION in
 ;;
 
 
+
 *)
 
-    echo "❌ Opción incorrecta"
+    echo "❌ Opción inválida"
 
 ;;
 
-esac
+esac 
