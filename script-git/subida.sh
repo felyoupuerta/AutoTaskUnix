@@ -1,8 +1,9 @@
 #!/bin/bash
-
 # ==========================================
-# Git Helper - DEV / MAIN workflow
-# Felipe
+# Git Helper 
+# Felipe Angeriz Estefanell
+#
+#23/06/2026
 # ==========================================
 
 
@@ -11,10 +12,9 @@ echo "        Git Helper"
 echo "=================================="
 
 
-# Verificar que estamos dentro de un repo git
 if ! git rev-parse --is-inside-work-tree > /dev/null 2>&1
 then
-    echo "❌ No estás dentro de un repositorio Git"
+    echo " No estás dentro de un repositorio Git"
     exit 1
 fi
 
@@ -46,17 +46,17 @@ case $OPTION in
 1)
 
     echo ""
-    echo "➡️  Preparando subida a DEV"
+    echo "Preparando subida a DEV"
     echo ""
 
 
     # Crear DEV si no existe
     if git show-ref --verify --quiet refs/heads/DEV
     then
-        echo "✔ Rama DEV encontrada"
+        echo "Rama DEV encontrada"
         git checkout DEV
     else
-        echo "⚠️ Rama DEV no existe"
+        echo "Rama DEV no existe"
         echo "Creando DEV..."
         git checkout -b DEV
     fi
@@ -77,7 +77,7 @@ case $OPTION in
 
     if [ -z "$MESSAGE" ]
     then
-        echo "❌ El commit necesita un mensaje"
+        echo "El commit necesita un mensaje"
         exit 1
     fi
 
@@ -95,9 +95,9 @@ case $OPTION in
 
     if git commit -m "$MESSAGE"
     then
-        echo "✔ Commit creado"
+        echo "Commit creado"
     else
-        echo "❌ Error creando commit"
+        echo "Error creando commit"
         exit 1
     fi
 
@@ -110,10 +110,10 @@ case $OPTION in
     if git push origin DEV
     then
         echo ""
-        echo "✅ Cambios subidos correctamente a DEV"
+        echo "Cambios subidos correctamente a DEV"
     else
         echo ""
-        echo "❌ Error subiendo a DEV"
+        echo "Error subiendo a DEV"
         exit 1
     fi
 
@@ -125,7 +125,7 @@ case $OPTION in
 2)
 
     echo ""
-    echo "⚠️ Vas a fusionar DEV → MAIN"
+    echo "Vas a fusionar DEV → MAIN"
     echo ""
 
     read -p "¿Continuar? (s/n): " CONFIRM
@@ -143,9 +143,9 @@ case $OPTION in
 
     if git show-ref --verify --quiet refs/heads/DEV
     then
-        echo "✔ DEV existe"
+        echo " DEV existe"
     else
-        echo "❌ No existe la rama DEV"
+        echo " No existe la rama DEV"
         exit 1
     fi
 
@@ -170,9 +170,9 @@ case $OPTION in
 
     if git merge DEV
     then
-        echo "✔ Merge correcto"
+        echo " Merge correcto"
     else
-        echo "❌ Conflicto en merge"
+        echo " Conflicto en merge"
         echo "Resuelve los conflictos y vuelve a ejecutar"
         exit 1
     fi
@@ -189,7 +189,7 @@ case $OPTION in
         echo "✅ DEV fusionado en MAIN correctamente"
     else
         echo ""
-        echo "❌ Error subiendo MAIN"
+        echo " Error subiendo MAIN"
         exit 1
     fi
 
@@ -209,7 +209,7 @@ case $OPTION in
 
 *)
 
-    echo "❌ Opción inválida"
+    echo " Opción inválida"
 
 ;;
 
