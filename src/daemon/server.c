@@ -52,12 +52,17 @@ void* server_loop(void* arg)
             perror("[ERROR] Al aceptar cliente\n");
         }
         printf("! Cliente conectado!\n");
+        
+        /*
         for(int i = 0;i<5;i++)
         {
             printf("Durmiendo %d\n",i);
             sleep(1);
         }
-        
+        */
+
+
+
         //Inicializamos la estructura de REQUEST de tasks declarada en --> protocol.h
         Request req; 
         
@@ -71,16 +76,21 @@ void* server_loop(void* arg)
         switch(req.comando)
         {
             case CMD_LIST:
-                printf("[SERVER] HAS ELEGIDO CMD_LIST");
+                printf("[SERVER] HAS ELEGIDO CMD_LIST\n");
+                fflush(stdout);
                 break;
             case CMD_ADD:
-                printf("[SERVER] HAS ELEGIDO CMD_ADD");
+                printf("[SERVER] HAS ELEGIDO CMD_ADD\n");
+                scheduler_add_task(&req)
+                fflush(stdout);
                 break;
             case CMD_RUN:
-                printf("[SERVER] HAS ELEGIDO CMD_RUN");
+                printf("[SERVER] HAS ELEGIDO CMD_RUN\n");
+                fflush(stdout);
                 break;
             default:
-                printf("[SERVER] COMANDO DESCONOCIDO");
+                printf("[SERVER] COMANDO DESCONOCIDO\n");
+                fflush(stdout);
                 break;
         }
         close(cli_fd);

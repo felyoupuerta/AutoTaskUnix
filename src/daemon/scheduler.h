@@ -1,5 +1,6 @@
 #ifndef _SCHEDULER_H
 #include "config.h"
+#include "protocol.h"
 /*orquestador*/
 
 typedef enum
@@ -21,5 +22,7 @@ typedef struct
 void scheduler_init(void);
 void* scheduler_loop(void* arg);
 
+
+int scheduler_add_tas(Request *req);
 
 #endif /* scheduler.h */

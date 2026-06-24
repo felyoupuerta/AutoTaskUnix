@@ -1,8 +1,6 @@
 #ifndef _POTOCOL_H
 
 #include "config.h"
-
-
 typedef enum
 {
     CMD_LIST,

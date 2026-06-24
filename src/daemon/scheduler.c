@@ -42,16 +42,39 @@ void* scheduler_loop(void* arg)
                     }
             }
         }
-        /*TAREA DE PRUEBA*/
+
+        /*TAREA DE PRUEBA
         lista_tareas[0].id = 1;
         lista_tareas[0].intervalo = 5; // Cada 5 segundos
         lista_tareas[0].last_run = 0;  //Volver despues? time(NULL);
         lista_tareas[0].estado = ESTADO_ESPERANDO;
         snprintf(lista_tareas[0].cmd, M_BUFF_CMD, "echo 'Hola Felipe'");
         fflush(stdout);
+        */
         //DESBLOQUEO EL HILO
         pthread_mutex_unlock(&mutex);
         sleep(1);
     }
     return NULL;
+}
+
+int scheduler_add_task(Request *req)
+{
+    pthread_mutex_lock(&mutex);
+    int i = 0;
+
+    for(i = 0;i<MAX_CL;i++)
+    {
+        if(lista_tareas[i].id == -1)
+        {
+            lista_tareas[i].id = lista_tareas[i].id + 1;
+            strncpy(lista_tareas[i].cmd, req->cmd,M_BUFF_CMD -1);
+            lista_tareas[i].intervalo = req->s_intervalo;
+            lista_tareas[i].last_run = 0;
+            lista_tareas[i].estado = ESTADO_ESPERANDO;
+            pthread_mutex_unlock(&mutex);
+            return 0;
+        }
+    }
+    return -1;
 }
