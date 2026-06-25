@@ -14,21 +14,21 @@
 
 void* server_loop(void* arg)
 {
-    
+
     int sock = socket(AF_UNIX, SOCK_STREAM,0);
     if(sock < 0)
     {
         perror("[ERROR] AL crear el socket\n");
         exit(EXIT_FAILURE);
     }
-    
+
     struct sockaddr_un addr = {0};
     struct sockaddr_un cl_addr = {0};
     socklen_t tam = sizeof(cl_addr);
 
     addr.sun_family = AF_UNIX;
     strncpy(addr.sun_path, SOCK_F,sizeof(addr.sun_path) -1);
-    
+
     //DESLINKAR EL SOCK_F POR SI LA ULTIMA VEZ NO SE CERRÓ
     unlink(SOCK_F);
 
@@ -37,13 +37,13 @@ void* server_loop(void* arg)
         perror("[ERROR] ejecutando el BIND\n");
         exit(EXIT_FAILURE);
     }
-   
+
     if(listen(sock,BACKLOG) != 0)
     {
         perror("[ERROR] Al ejecutar el listen()\n");
         exit(EXIT_FAILURE);
     }
-    
+
     while(1)
     {
         int cli_fd = accept(sock,(struct sockaddr *)&cl_addr,&tam);
@@ -54,10 +54,10 @@ void* server_loop(void* arg)
         printf("! Cliente conectado!\n");
 
         //Inicializamos la estructura de REQUEST de tasks declarada en --> protocol.h
-        Request req; 
-        
+        Request req;
+        Task tsk;
         ssize_t bytes_leidos = read(cli_fd,&req,sizeof(req));
-        
+
         if(bytes_leidos <= 0)
         {
             perror("[ERROR] al recibir los datos por el socket\n");
@@ -77,6 +77,7 @@ void* server_loop(void* arg)
                 break;
             case CMD_RUN:
                 printf("[SERVER] HAS ELEGIDO CMD_RUN\n");
+                scheduler_run_task(&req,&tsk);
                 fflush(stdout);
                 break;
             default:
@@ -85,14 +86,12 @@ void* server_loop(void* arg)
                 break;
         }
         close(cli_fd);
-
-         
-
-
-
-
-
-
     }
     return 0;
 }
+
+
+
+
+
+

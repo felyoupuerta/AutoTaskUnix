@@ -31,4 +31,9 @@ void scheduler_list_task(Request *req);
 // FUNC PARA EL ENUM DE ESTADOS
 const char* state_to_text(TaskStatus estado);
 
-#endif /* scheduler.h */
+//FUNC PARA EL RUN DE LAS TAREAS
+void scheduler_run_task(Request *req);
+
+
+
+#endif /* scheduler.h */ 

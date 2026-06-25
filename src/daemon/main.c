@@ -11,11 +11,11 @@ int main(void)
 {
     //INICIO EL SCHEDULER, LITA DE TAREAS CON ID -1, ETC ...
     scheduler_init();
-    
+
     //IDENTIFICADORES DEL HILO
     pthread_t hilo_scheduler;
     pthread_t hilo_server;
-    
+
     //CREO EL HILO CON LA SYSCALL
     if(pthread_create(&hilo_scheduler,NULL,scheduler_loop,NULL) != 0)
     {
@@ -27,7 +27,7 @@ int main(void)
         perror("[ERROR] al crear el hilo de server_loop()\n");
         exit(EXIT_FAILURE);
     }
-    
+
 
     //ME QUEDO ESPERANDO A QUE EL HILO TERMINE, NO LO HARA NUNCA PQ ES UN WHILE(1)
     if(pthread_join(hilo_scheduler,NULL) != 0)
@@ -43,6 +43,6 @@ int main(void)
         exit(EXIT_FAILURE);
     }
 
-    
+
     return 0;
-}
+} 

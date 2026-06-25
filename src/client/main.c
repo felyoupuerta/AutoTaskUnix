@@ -42,7 +42,7 @@ int main(int argc, char **argv)
     char buffer[100];
     char *end;
     Request req = {0}; //LE RESERVAMOS MEMORIA REAL
-    
+
     if(argc < 2)
     {
         printf("==================================================================\n");
@@ -55,7 +55,7 @@ int main(int argc, char **argv)
         exit(EXIT_FAILURE);
     }
 
-    
+
     if(strncmp(argv[1],"list",4) == 0)
     {
         printf("Opcion List seleccionada\n");
@@ -72,7 +72,7 @@ int main(int argc, char **argv)
         strcpy(req.cmd,command);
         printf("Deseas añadir intervalo?(por defecto 5) si pones 0 se pondrá por defecto, si no debes poner un entero\n");
         fgets(buffer, sizeof(buffer), stdin);
-        
+
         //VALIDAR QUE ES UN NU,ER CON STRTOL
         long valor = strtol(buffer,&end,10);
         if(*end != '\n' && *end != '\0')

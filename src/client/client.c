@@ -10,7 +10,7 @@
 
 int send_request(Request *req)
 {
-    
+
     //GENERAMOS EL SOCKET DE TIPO UNIX
     int fd_sck = socket(AF_UNIX, SOCK_STREAM, 0);
     //VRIFICAMOS LA CREACION CORRECTA DE EL SOCKET
@@ -40,5 +40,4 @@ int send_request(Request *req)
 
 
     return 0;
-}
-
+} 
