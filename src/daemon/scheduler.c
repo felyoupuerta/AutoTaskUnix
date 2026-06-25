@@ -120,7 +120,7 @@ const char* state_to_text(TaskStatus estado)
         case ESTADO_ERROR:
             return "ESTADO_ERROR";
         default:
-            return "DESCONOCIDO"
+            return "DESCONOCIDO";
     }
     printf("Estado de la tarea: %s\n", estado_texto);
 }

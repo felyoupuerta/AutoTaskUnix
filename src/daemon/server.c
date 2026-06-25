@@ -7,7 +7,7 @@
 /** MIOS **/
 
 #include "config.h"
-#include "protocol.h"
+//#include "protocol.h"
 #include "scheduler.h"
 
 
@@ -52,7 +52,7 @@ void* server_loop(void* arg)
             perror("[ERROR] Al aceptar cliente\n");
         }
         printf("! Cliente conectado!\n");
-        
+
         //Inicializamos la estructura de REQUEST de tasks declarada en --> protocol.h
         Request req; 
         
