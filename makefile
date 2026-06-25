@@ -1,9 +1,18 @@
 CC       := gcc
-# El flag -I buscar  headers en esas carpetas automáticamente
 CFLAGS   := -Wall -Wextra -Wpedantic -O2 -Isrc/common -Isrc/daemon -Isrc/client
 LDFLAGS  := -pthread
 
-#DIRS
+# ==============================================================================
+#  Control de Verbose (Modo Detallado)
+# ==============================================================================
+# Por defecto es silencioso (V=0). Si ejecutas 'make V=1', se activará el modo detallado.
+ifeq ($(V),1)
+    Q :=
+else
+    Q := @
+endif
+
+# DIRS
 SRC_DIR  := src
 OBJ_DIR  := obj
 BIN_DIR  := bin
@@ -11,7 +20,6 @@ BIN_DIR  := bin
 # Ejecutables
 DAEMON_BIN := $(BIN_DIR)/taskd
 CLIENT_BIN := $(BIN_DIR)/taskctl
-
 
 COMMON_HEADERS := $(SRC_DIR)/common/protocol.h $(SRC_DIR)/common/config.h
 
@@ -26,8 +34,7 @@ CLIENT_SRCS    := $(SRC_DIR)/client/main.c \
 DAEMON_OBJS    := $(DAEMON_SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 CLIENT_OBJS    := $(CLIENT_SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
-
-#  compilar ambos binarios
+# Compilar ambos binarios
 all: $(DAEMON_BIN) $(CLIENT_BIN)
 	@echo "===================================================="
 	@echo " Compilación completada con éxito.                  "
@@ -36,10 +43,10 @@ all: $(DAEMON_BIN) $(CLIENT_BIN)
 	@echo "  - Cliente: ./$(CLIENT_BIN)                       "
 	@echo "===================================================="
 
-# compilar solo demonio
+# Compilar solo demonio
 daemon: $(DAEMON_BIN)
 
-# compilar solo cliente
+# Compilar solo cliente
 client: $(CLIENT_BIN)
 
 # ==============================================================================
@@ -47,14 +54,14 @@ client: $(CLIENT_BIN)
 # ==============================================================================
 
 $(DAEMON_BIN): $(DAEMON_OBJS)
-	@mkdir -p $(BIN_DIR)
+	$(Q)mkdir -p $(BIN_DIR)
 	@echo "==> Enlazando Demonio: $@"
-	$(CC) $(DAEMON_OBJS) -o $@ $(LDFLAGS)
+	$(Q)$(CC) $(DAEMON_OBJS) -o $@ $(LDFLAGS)
 
 $(CLIENT_BIN): $(CLIENT_OBJS)
-	@mkdir -p $(BIN_DIR)
+	$(Q)mkdir -p $(BIN_DIR)
 	@echo "==> Enlazando Cliente: $@"
-	$(CC) $(CLIENT_OBJS) -o $@ $(LDFLAGS)
+	$(Q)$(CC) $(CLIENT_OBJS) -o $@ $(LDFLAGS)
 
 # ==============================================================================
 #  Reglas de Compilación (Compilar objetos .o)
@@ -62,15 +69,15 @@ $(CLIENT_BIN): $(CLIENT_OBJS)
 
 # Compilar objetos del Demonio
 $(OBJ_DIR)/daemon/%.o: $(SRC_DIR)/daemon/%.c $(COMMON_HEADERS)
-	@mkdir -p $(dir $@)
+	$(Q)mkdir -p $(dir $@)
 	@echo "-> Compilando objeto del demonio: $<"
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(Q)$(CC) $(CFLAGS) -c $< -o $@
 
 # Compilar objetos del Cliente
 $(OBJ_DIR)/client/%.o: $(SRC_DIR)/client/%.c $(COMMON_HEADERS)
-	@mkdir -p $(dir $@)
+	$(Q)mkdir -p $(dir $@)
 	@echo "-> Compilando objeto del cliente: $<"
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(Q)$(CC) $(CFLAGS) -c $< -o $@
 
 # ==============================================================================
 #  Limpieza y Mantenimiento
@@ -78,8 +85,8 @@ $(OBJ_DIR)/client/%.o: $(SRC_DIR)/client/%.c $(COMMON_HEADERS)
 
 clean:
 	@echo "Limpiando archivos de compilación..."
-	rm -rf $(OBJ_DIR) $(BIN_DIR)
+	$(Q)rm -rf $(OBJ_DIR) $(BIN_DIR)
 	@echo "Limpieza completada."
 
 # Evita conflictos si existen archivos con estos nombres en la raíz
-.PHONY: all daemon client clean 
+.PHONY: all daemon client clean
