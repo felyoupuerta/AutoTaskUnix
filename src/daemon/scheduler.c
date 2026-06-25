@@ -82,6 +82,7 @@ int scheduler_add_task(Request *req)
 
 void scheduler_list_task(Request *req)
 {
+    (void)req;
     //BLOQUEO HILO
     pthread_mutex_lock(&mutex);
     
@@ -92,6 +93,7 @@ void scheduler_list_task(Request *req)
         {
             continue;
         }
+        printf("--------------------------------------------\n");
         printf("Id TAREA: %d\n", lista_tareas[i].id);
         printf("Intervalo de ejecucion: %d\n",lista_tareas[i].intervalo);
         printf("Última ejecución: %lld\n", (long long)lista_tareas[i].last_run);
@@ -99,6 +101,7 @@ void scheduler_list_task(Request *req)
         printf("Estado de la tarea: %s\n", texto);
         printf("PID: %d\n", lista_tareas[i].pid);
     }
+    printf("---------------------------------------------------\n");
     //DESBLOQUEAMOS EL HILO
     pthread_mutex_unlock(&mutex);
 }
@@ -111,21 +114,13 @@ const char* state_to_text(TaskStatus estado)
     switch(estado)
     {
         case ESTADO_ESPERANDO:
-            estado_texto = "ESPERANDO";
-            return = "ESPERANDO"
-            break;
+            return "ESPERANDO";
         case ESTADO_RUNNING:
-            estado_texto = "ESTADO_RUNNING";
-            return = "ESTADO_RUNNING"
-            break;
+            return "RUNNING";
         case ESTADO_ERROR:
-            estado_texto = "ESTADO_ERROR"
-            return = "ESTADO_ERROR";
-            break;
+            return "ESTADO_ERROR";
         default:
-            estado_texto = "DESCONOCIDO";
-            return = "DESCONOCIDO"
-            break;
+            return "DESCONOCIDO"
     }
     printf("Estado de la tarea: %s\n", estado_texto);
 }

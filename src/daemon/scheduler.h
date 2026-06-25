@@ -24,11 +24,11 @@ typedef struct
 void scheduler_init(void);
 void* scheduler_loop(void* arg);
 
-//FUNCIONES DE CMD
+// FUNCIONES DE CMD
 int scheduler_add_task(Request *req);
 void scheduler_list_task(Request *req);
-//FUNC PARA EL ENUM DE ESTADOS
 
-const char* state_to_text(TaskStatus estado)
+// FUNC PARA EL ENUM DE ESTADOS
+const char* state_to_text(TaskStatus estado);
 
 #endif /* scheduler.h */
