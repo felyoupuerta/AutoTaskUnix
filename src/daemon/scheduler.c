@@ -172,3 +172,28 @@ void scheduler_run_task(Request *req)
 
     pthread_mutex_unlock(&mutex);
 } 
+
+static void send_cliente(int cli_fd, int status, const char *mensaje)
+{
+    Response res = {0};
+    res.status = status;
+
+    // Copiamos el mensaje al buffer de la struct
+    strncpy(res.response, mensaje, sizeof(res.response) - 1);
+    
+    // Enviamos la estructura completa por el socket del cliente
+    if (write(cli_fd, &res, sizeof(Response)) < 0) {
+        perror("[ERROR] al enviar respuesta al cliente\n");
+    }
+}
+/*
+
+ESTRUCTURA DE RESPONSE
+
+typedef struct
+{
+     int status;
+     char response[M_BUFF_S_RESPONSE];
+} Response;
+
+*/

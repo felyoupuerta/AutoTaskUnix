@@ -38,8 +38,31 @@ int send_request(Request *req)
     }
     //USAMOS WRITE PARA ENV INFO POR EL SOCKET
     write(fd_sck,req,sizeof(Request));
+    
+    //DECLARO EL STRUCT DE RESPUESTA VACIO
+    Response resp = {0};
+
+    if(read(fd_sck,&resp,sizeof(Response)) > 0)
+    {
+        //SI ES MAYOR QUE 0 ES QUE OBTUVIMOS 
+        //UNA RESPONSE POR PARTE DEL SERVER
+        printf("%s",resp.response);
+    }
+    else
+    {
+        perror("[ERROR] al recibir datos desde el servidor\n");
+    }
     close(fd_sck);
-
-
     return 0;
 } 
+
+/*
+ESTRUCTURA DE RESPONSE
+
+typedef struct
+{
+    int status;
+    char response[M_BUFF_S_RESPONSE];
+} Response;
+
+*/
