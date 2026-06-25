@@ -3,7 +3,7 @@
 #include<unistd.h>
 #include<sys/socket.h>
 #include<sys/un.h>
-
+#include<string.h>
 /** MIOS **/
 
 #include "config.h"
@@ -14,7 +14,7 @@
 
 void* server_loop(void* arg)
 {
-
+    (void)arg;
     int sock = socket(AF_UNIX, SOCK_STREAM,0);
     if(sock < 0)
     {
@@ -55,7 +55,6 @@ void* server_loop(void* arg)
 
         //Inicializamos la estructura de REQUEST de tasks declarada en --> protocol.h
         Request req;
-        Task tsk;
         ssize_t bytes_leidos = read(cli_fd,&req,sizeof(req));
 
         if(bytes_leidos <= 0)
@@ -77,7 +76,7 @@ void* server_loop(void* arg)
                 break;
             case CMD_RUN:
                 printf("[SERVER] HAS ELEGIDO CMD_RUN\n");
-                scheduler_run_task(&req,&tsk);
+                scheduler_run_task(&req);
                 fflush(stdout);
                 break;
             default:

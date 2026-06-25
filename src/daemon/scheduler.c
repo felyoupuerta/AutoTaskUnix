@@ -69,9 +69,10 @@ int scheduler_add_task(Request *req)
         {
             lista_tareas[i].id = i + 1;
 
-            strncpy(lista_tareas[i].cmd,
-                    req->cmd,
-                    M_BUFF_CMD - 1);
+            snprintf(lista_tareas[i].cmd,
+                    sizeof(lista_tareas[i].cmd),
+                    "%s",
+                    req->cmd);
 
             lista_tareas[i].cmd[M_BUFF_CMD - 1] = '\0';
 
@@ -159,7 +160,7 @@ void scheduler_run_task(Request *req)
 
             printf("Ejecutando Tarea con ID: %d\n",
                    lista_tareas[i].id);
-
+            system(lista_tareas[i].cmd);
 
             lista_tareas[i].estado = ESTADO_RUNNING;
 

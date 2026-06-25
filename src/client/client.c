@@ -21,8 +21,10 @@ int send_request(Request *req)
     }
     //Definimos el Struct con el nombre addr
     struct sockaddr_un addr = {0};
-    //calculamos el tamaño del struct completo
-    socklen_t tam = sizeof(addr);
+    
+    //calculamos el tamaño del struct completo COMENTADO POR ACTUAL DESUSO
+    //socklen_t tam = sizeof(addr);
+    
     //familia de socket linux, porque voy a usar un fichero .sock
     addr.sun_family=AF_UNIX;
     //COPIO MI SOCK_F(RUTA DE EL .sock) a el sun path del struct

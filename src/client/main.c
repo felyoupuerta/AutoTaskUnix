@@ -36,9 +36,7 @@ typedef enum
 
 int main(int argc, char **argv)
 {
-    int i = 0;
     char command[M_BUFF_CMD];
-    int this_interval = 0;
     char buffer[100];
     char *end;
     Request req = {0}; //LE RESERVAMOS MEMORIA REAL
