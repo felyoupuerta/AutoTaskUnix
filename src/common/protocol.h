@@ -1,4 +1,4 @@
-#ifndef _POTOCOL_H
+#ifndef _PROTOCOL_H
 
 #include "config.h"
 typedef enum

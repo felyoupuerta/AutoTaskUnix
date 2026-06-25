@@ -77,11 +77,12 @@ void* server_loop(void* arg)
         {
             case CMD_LIST:
                 printf("[SERVER] HAS ELEGIDO CMD_LIST\n");
+                scheduler_add_task(&req);
                 fflush(stdout);
                 break;
             case CMD_ADD:
                 printf("[SERVER] HAS ELEGIDO CMD_ADD\n");
-                scheduler_add_task(&req)
+                scheduler_add_task(&req);
                 fflush(stdout);
                 break;
             case CMD_RUN:

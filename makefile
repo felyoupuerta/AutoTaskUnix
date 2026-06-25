@@ -1,23 +1,18 @@
-# ==============================================================================
-#  Makefile para TaskDaemon
-# ==============================================================================
-
-# Compilador y flags
 CC       := gcc
-# El flag -I le dice a gcc que busque los headers en esas carpetas automáticamente
+# El flag -I buscar  headers en esas carpetas automáticamente
 CFLAGS   := -Wall -Wextra -Wpedantic -O2 -Isrc/common -Isrc/daemon -Isrc/client
 LDFLAGS  := -pthread
 
-# Directorios
+#DIRS
 SRC_DIR  := src
 OBJ_DIR  := obj
 BIN_DIR  := bin
 
-# Ejecutables finales
+# Ejecutables
 DAEMON_BIN := $(BIN_DIR)/taskd
 CLIENT_BIN := $(BIN_DIR)/taskctl
 
-# Fuentes (Source Files)
+
 COMMON_HEADERS := $(SRC_DIR)/common/protocol.h $(SRC_DIR)/common/config.h
 
 DAEMON_SRCS    := $(SRC_DIR)/daemon/main.c \
@@ -27,15 +22,12 @@ DAEMON_SRCS    := $(SRC_DIR)/daemon/main.c \
 CLIENT_SRCS    := $(SRC_DIR)/client/main.c \
                   $(SRC_DIR)/client/client.c
 
-# Objetos (Object Files)
+# Objetos
 DAEMON_OBJS    := $(DAEMON_SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 CLIENT_OBJS    := $(CLIENT_SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
-# ==============================================================================
-#  Reglas Principales
-# ==============================================================================
 
-# Por defecto, compila ambos binarios
+#  compilar ambos binarios
 all: $(DAEMON_BIN) $(CLIENT_BIN)
 	@echo "===================================================="
 	@echo " Compilación completada con éxito.                  "
@@ -44,10 +36,10 @@ all: $(DAEMON_BIN) $(CLIENT_BIN)
 	@echo "  - Cliente: ./$(CLIENT_BIN)                       "
 	@echo "===================================================="
 
-# Regla para compilar solo el demonio
+# compilar solo demonio
 daemon: $(DAEMON_BIN)
 
-# Regla para compilar solo el cliente
+# compilar solo cliente
 client: $(CLIENT_BIN)
 
 # ==============================================================================

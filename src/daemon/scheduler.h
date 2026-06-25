@@ -19,10 +19,13 @@ typedef struct
     TaskStatus estado;
     pid_t pid;
 } Task;
+
+
 void scheduler_init(void);
 void* scheduler_loop(void* arg);
 
-
-int scheduler_add_tas(Request *req);
+//FUNCIONES DE CMD
+int scheduler_add_task(Request *req);
+void scheduler_add_task(Request *req);
 
 #endif /* scheduler.h */

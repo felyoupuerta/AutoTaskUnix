@@ -78,3 +78,22 @@ int scheduler_add_task(Request *req)
     }
     return -1;
 }
+
+
+void scheduler_add_task(Request *req)
+{
+    //BLOQUEO HILO
+    pthread_mutex_lock(&mutex);
+    
+    int i = 0
+    for(i = 0;i < MAX_CL;i++)
+    {
+        printf("Id TAREA: %d\n", lista_tareas[i].id);
+        printf("Intervalo de ejecucion: %d\n",lista_tareas[i].intervalo);
+        printf("Última ejecución: %lld\n", (long long)lista_tareas[i].last_run);
+        printf("Estado de la tarea: %s\n", lista_tareas[i].estado);
+        printf("PID: %d\n", lista_tareas[i].pid)
+    }
+    //DESBLOQUEAMOS EL HILO
+    pthread_mutex_unlock(&mutex);
+}
