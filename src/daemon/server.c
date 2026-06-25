@@ -53,16 +53,6 @@ void* server_loop(void* arg)
         }
         printf("! Cliente conectado!\n");
         
-        /*
-        for(int i = 0;i<5;i++)
-        {
-            printf("Durmiendo %d\n",i);
-            sleep(1);
-        }
-        */
-
-
-
         //Inicializamos la estructura de REQUEST de tasks declarada en --> protocol.h
         Request req; 
         
@@ -77,7 +67,7 @@ void* server_loop(void* arg)
         {
             case CMD_LIST:
                 printf("[SERVER] HAS ELEGIDO CMD_LIST\n");
-                scheduler_add_task(&req);
+                scheduler_list_task(&req);
                 fflush(stdout);
                 break;
             case CMD_ADD:
