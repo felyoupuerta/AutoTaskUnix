@@ -9,8 +9,19 @@
 #include "config.h"
 //#include "protocol.h"
 #include "scheduler.h"
+#include "server.h"
 
-
+char msg_out[M_BUFF_S_RESPONSE] = {0};
+int status_out = 0;
+static void send_cliente(int cli_fd, int status, const char *mensaje)
+{
+    Response res = {0};
+    res.status = status;
+    strncpy(res.response, mensaje, sizeof(res.response) - 1);
+    
+    // Enviamos la estructura completa por el socket
+    write(cli_fd, &res, sizeof(Response));
+}
 
 void* server_loop(void* arg)
 {
@@ -64,26 +75,44 @@ void* server_loop(void* arg)
         }
         switch(req.comando)
         {
+            case CMD_ADD:
+                printf("[SERVER] HAS ELEGIDO CMD_ADD\n");
+                
+                if(scheduler_add_task(&req) == 0)
+                {
+                    snprintf(msg_out,sizeof(msg_out), "[OK] Tarea añadida correctamente.\n");                
+                }
+                else
+                {
+                    status_out = -1;
+                    snprintf(msg_out,sizeof(msg_out), "[BAD] No hay huecos disponibles en el scheduler.\n");                              }
+                fflush(stdout);
+                break;
+
             case CMD_LIST:
                 printf("[SERVER] HAS ELEGIDO CMD_LIST\n");
                 scheduler_list_task(&req);
+                snprintf(msg_out, sizeof(msg_out), "[INFO] Listado solicitado (Procesando...)\n");
                 fflush(stdout);
                 break;
-            case CMD_ADD:
-                printf("[SERVER] HAS ELEGIDO CMD_ADD\n");
-                scheduler_add_task(&req);
-                fflush(stdout);
-                break;
+
             case CMD_RUN:
                 printf("[SERVER] HAS ELEGIDO CMD_RUN\n");
-                scheduler_run_task(&req);
-                fflush(stdout);
-                break;
+                // Ejecutar la tarea y retransmitir la salida al cliente por socket
+                scheduler_run_task_stream(&req, cli_fd);
+                // Después de hacer streaming de la salida, cerrar socket y continuar sin enviar el mensaje final estándar
+                close(cli_fd);
+                continue;
+
             default:
                 printf("[SERVER] COMANDO DESCONOCIDO\n");
                 fflush(stdout);
                 break;
         }
+        //DEVOLVER DATOS AL CLIENTE ANTES DE CERRAR EL SOCKET
+
+        send_cliente(cli_fd, status_out, msg_out);
+
         close(cli_fd);
     }
     return 0;

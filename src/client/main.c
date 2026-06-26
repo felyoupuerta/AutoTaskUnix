@@ -36,8 +36,8 @@ typedef enum
 
 int main(int argc, char **argv)
 {
-    char command[M_BUFF_CMD];
-    char buffer[100];
+    char command[M_BUFF_CMD] = {0};
+    char buffer[100] = {0};
     char *end;
     Request req = {0}; //LE RESERVAMOS MEMORIA REAL
 
