@@ -96,9 +96,9 @@ int scheduler_add_task(Request *req)
 }
 
 
-void scheduler_list_task(Request *req)
+void scheduler_list_task(char *buffer, size_t size)
 {
-    (void)req;
+    //(void)req;
 
     pthread_mutex_lock(&mutex);
 
@@ -109,19 +109,23 @@ void scheduler_list_task(Request *req)
         {
             continue;
         }
+        char temp[256];
 
-        printf("--------------------------------------------\n");
-        printf("Id TAREA: %d\n", lista_tareas[i].id);
-        printf("Intervalo de ejecucion: %d\n", lista_tareas[i].intervalo);
-        printf("Última ejecución: %lld\n",
-               (long long)lista_tareas[i].last_run);
-
-        printf("Estado de la tarea: %s\n",
-               state_to_text(lista_tareas[i].estado));
-
-        printf("PID: %d\n", lista_tareas[i].pid);
+        snprintf(temp, sizeof(temp),
+            "----------------------\n"
+            "ID: %d\n"
+            "CMD: %s\n"
+            "Intervalo: %d\n"
+            "Estado: %s\n"
+            "PID: %d\n",
+            lista_tareas[i].id,
+            lista_tareas[i].cmd,
+            lista_tareas[i].intervalo,
+            state_to_text(lista_tareas[i].estado),
+            lista_tareas[i].pid
+        );
+        strncat(buffer, temp, size - strlen(buffer) - 1);
     }
-
     printf("--------------------------------------------\n");
 
 
@@ -212,7 +216,6 @@ void scheduler_run_task_stream(Request *req, int cli_fd)
     char buff[M_BUFF_S_RESPONSE] = {0};
     while(fgets(buff, sizeof(buff), fp) != NULL)
     {
-        // Enviar cada línea/fragmento al cliente
         send_cliente(cli_fd, 0, buff);
         memset(buff, 0, sizeof(buff));
     }

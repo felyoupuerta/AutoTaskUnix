@@ -90,22 +90,26 @@ void* server_loop(void* arg)
                 break;
 
             case CMD_LIST:
-                printf("[SERVER] HAS ELEGIDO CMD_LIST\n");
-                scheduler_list_task(&req);
-                snprintf(msg_out, sizeof(msg_out), "[INFO] Listado solicitado (Procesando...)\n");
+                printf("[INFO] Listado solicitado (Procesando...)\n");
+
+                status_out = 0;
+
+                scheduler_list_task(msg_out, sizeof(msg_out));
+                
                 fflush(stdout);
                 break;
 
             case CMD_RUN:
                 printf("[SERVER] HAS ELEGIDO CMD_RUN\n");
-                // Ejecutar la tarea y retransmitir la salida al cliente por socket
+                
                 scheduler_run_task_stream(&req, cli_fd);
-                // Después de hacer streaming de la salida, cerrar socket y continuar sin enviar el mensaje final estándar
+
                 close(cli_fd);
                 continue;
 
             default:
                 printf("[SERVER] COMANDO DESCONOCIDO\n");
+                
                 fflush(stdout);
                 break;
         }

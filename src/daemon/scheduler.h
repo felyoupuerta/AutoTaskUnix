@@ -29,7 +29,7 @@ void* scheduler_loop(void* arg);
 
 // FUNCIONES DE CMD
 int scheduler_add_task(Request *req);
-void scheduler_list_task(Request *req);
+void scheduler_list_task(char *buffer, size_t size);
 
 // FUNC PARA EL ENUM DE ESTADOS
 const char* state_to_text(TaskStatus estado);
