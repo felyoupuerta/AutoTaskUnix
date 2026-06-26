@@ -98,7 +98,17 @@ void* server_loop(void* arg)
                 
                 fflush(stdout);
                 break;
-
+            case CMD_DELETE:
+                if(scheduler_delete_task(&req) == -1)
+                {
+                    printf("Error al borrar la tarea con ID: %d\n",req.task_id);
+                    snprintf(msg_out,sizeof(msg_out), "[BAD] Error al borrar la tarea.\n");
+                }
+                else
+                {
+                    snprintf(msg_out,sizeof(msg_out), "[OK]Tarea eliminada de la lista correcrtamente.\n");
+                }
+                break;
             case CMD_RUN:
                 printf("[SERVER] HAS ELEGIDO CMD_RUN\n");
                 

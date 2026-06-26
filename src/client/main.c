@@ -49,6 +49,7 @@ int main(int argc, char **argv)
         printf("1- ./bin/taskctl list\n");
         printf("2- ./bin/taskctl add <comando>\n");
         printf("3- ./bin/taskctl run <id>\n");
+        printf("4- ./bin/taskctl delete <id>\n");
         printf("==================================================================\n");
         exit(EXIT_FAILURE);
     }
@@ -96,6 +97,21 @@ int main(int argc, char **argv)
             exit(EXIT_FAILURE);
         }
         req.comando = CMD_RUN;
+        int id_maped = atoi(argv[2]);
+        req.task_id = id_maped;
+    }
+    else if(strncmp(argv[1],"delete",6) == 0)
+    {
+        if(argc< 3)
+        {
+            printf("Falta el argumento de el ID\n");
+            printf("Ejemplo: ./bin/taskctl delete <ID-tarea>\n");
+            exit(EXIT_FAILURE);
+        }
+        
+        req.comando = CMD_DELETE;
+        //PASAMOS EL ID DE STRING A ENTERO PARA GUARDARLO 
+        //COMO INT EN LA STRUCT DE REQUEST
         int id_maped = atoi(argv[2]);
         req.task_id = id_maped;
     }

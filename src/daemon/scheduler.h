@@ -39,4 +39,10 @@ void scheduler_run_task(Request *req);
 
 // FUNC PARA EJECUTAR Y ENVIAR SALIDA POR SOCKET AL CLIENTE
 void scheduler_run_task_stream(Request *req, int cli_fd);
+
+//FUNC PARA BORRAR TAREAS USANDO SU ID
+int scheduler_delete_task(Request *req);
+
+
+
 #endif /* scheduler.h */ 

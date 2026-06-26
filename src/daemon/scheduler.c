@@ -15,7 +15,18 @@ static void send_cliente(int cli_fd, int status, const char *mensaje);
 static Task lista_tareas[MAX_CL];
 static pthread_mutex_t mutex;
 
+/*
+typedef struct
+{
+    int id;
+    char cmd[M_BUFF_CMD];
+    int intervalo;
+    time_t last_run;
+    TaskStatus estado;
+    pid_t pid;
+} Task;
 
+*/
 void scheduler_init(void)
 {
     pthread_mutex_init(&mutex, NULL);
@@ -23,6 +34,10 @@ void scheduler_init(void)
     for(int i = 0; i < MAX_CL; i++)
     {
         lista_tareas[i].id = -1;
+        memset(lista_tareas[i].cmd, 0, sizeof(lista_tareas[i].cmd));
+        lista_tareas[i].intervalo = -1;
+        lista_tareas[i].last_run = 0;
+        lista_tareas[i].pid = -1;
     }
 }
 
@@ -263,14 +278,26 @@ static void send_cliente(int cli_fd, int status, const char *mensaje)
         perror("[ERROR] al enviar respuesta al cliente\n");
     }
 }
-/*
-
-ESTRUCTURA DE RESPONSE
-
-typedef struct
+int scheduler_delete_task(Request *req)
 {
-     int status;
-     char response[M_BUFF_S_RESPONSE];
-} Response;
+    pthread_mutex_lock(&mutex);
+    int rc = -1;
+    int i = 0;
 
-*/
+
+    for(i = 0;i < MAX_CL;i++)
+    {
+        if(lista_tareas[i].id == req->task_id)
+        {
+            lista_tareas[i].id = -1;
+            memset(lista_tareas[i].cmd, 0, sizeof(lista_tareas[i].cmd));
+            lista_tareas[i].intervalo = -1;
+            lista_tareas[i].last_run = 0;
+            lista_tareas[i].pid = -1;
+            rc = 0;
+            break;
+        }
+    }
+    pthread_mutex_unlock(&mutex);
+    return rc;
+}
