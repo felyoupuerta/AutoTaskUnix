@@ -98,10 +98,11 @@ void* server_loop(void* arg)
 
             case CMD_RUN:
                 printf("[SERVER] HAS ELEGIDO CMD_RUN\n");
-                scheduler_run_task(&req);
-                snprintf(msg_out, sizeof(msg_out), "[OK] Realizada la ejecución de la tarea %d.\n", req.task_id);
-                fflush(stdout);
-                break;
+                // Ejecutar la tarea y retransmitir la salida al cliente por socket
+                scheduler_run_task_stream(&req, cli_fd);
+                // Después de hacer streaming de la salida, cerrar socket y continuar sin enviar el mensaje final estándar
+                close(cli_fd);
+                continue;
 
             default:
                 printf("[SERVER] COMANDO DESCONOCIDO\n");

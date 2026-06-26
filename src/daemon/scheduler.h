@@ -1,7 +1,7 @@
 #ifndef _SCHEDULER_H
 #define _SCHEDULER_H
 
-
+#include<time.h>
 #include "config.h"
 #include "protocol.h"
 /*orquestador*/
@@ -36,4 +36,7 @@ const char* state_to_text(TaskStatus estado);
 
 //FUNC PARA EL RUN DE LAS TAREAS
 void scheduler_run_task(Request *req);
+
+// FUNC PARA EJECUTAR Y ENVIAR SALIDA POR SOCKET AL CLIENTE
+void scheduler_run_task_stream(Request *req, int cli_fd);
 #endif /* scheduler.h */ 

@@ -3,6 +3,7 @@
 #include<unistd.h>
 #include<sys/socket.h>
 #include<sys/un.h>
+#include<string.h>
 
 #include "config.h"
 #include "protocol.h"
@@ -42,16 +43,20 @@ int send_request(Request *req)
     //DECLARO EL STRUCT DE RESPUESTA VACIO
     Response resp = {0};
 
-    if(read(fd_sck,&resp,sizeof(Response)) > 0)
+    ssize_t n;
+    while((n = read(fd_sck, &resp, sizeof(Response))) > 0)
     {
-        //SI ES MAYOR QUE 0 ES QUE OBTUVIMOS 
-        //UNA RESPONSE POR PARTE DEL SERVER
-        printf("%s",resp.response);
+        // Imprimir cada fragmento recibido del servidor
+        printf("%s", resp.response);
+        fflush(stdout);
+        memset(&resp, 0, sizeof(resp));
     }
-    else
+
+    if(n < 0)
     {
         perror("[ERROR] al recibir datos desde el servidor\n");
     }
+
     close(fd_sck);
     return 0;
 } 

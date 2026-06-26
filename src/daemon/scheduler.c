@@ -4,8 +4,12 @@
 #include<unistd.h>
 #include<pthread.h>
 #include<time.h>
+#include<sys/wait.h>
 
 #include"scheduler.h"
+
+// Prototipo para la función estática que envía respuestas por socket
+static void send_cliente(int cli_fd, int status, const char *mensaje);
 
 
 static Task lista_tareas[MAX_CL];
@@ -172,6 +176,76 @@ void scheduler_run_task(Request *req)
 
     pthread_mutex_unlock(&mutex);
 } 
+
+void scheduler_run_task_stream(Request *req, int cli_fd)
+{
+    char cmd_buf[M_BUFF_CMD + 32] = {0};
+    int found = 0;
+
+    pthread_mutex_lock(&mutex);
+    for(int i = 0; i < MAX_CL; i++)
+    {
+        if(lista_tareas[i].id != -1 && lista_tareas[i].id == req->task_id)
+        {
+            snprintf(cmd_buf, sizeof(cmd_buf), "%s 2>&1", lista_tareas[i].cmd);
+            lista_tareas[i].estado = ESTADO_RUNNING;
+            lista_tareas[i].last_run = time(NULL);
+            found = 1;
+            break;
+        }
+    }
+    pthread_mutex_unlock(&mutex);
+
+    if(!found)
+    {
+        send_cliente(cli_fd, -1, "[ERROR] Tarea no encontrada.\n");
+        return;
+    }
+
+    FILE *fp = popen(cmd_buf, "r");
+    if(!fp)
+    {
+        send_cliente(cli_fd, -1, "[ERROR] No se pudo iniciar la tarea.\n");
+        return;
+    }
+
+    char buff[M_BUFF_S_RESPONSE] = {0};
+    while(fgets(buff, sizeof(buff), fp) != NULL)
+    {
+        // Enviar cada línea/fragmento al cliente
+        send_cliente(cli_fd, 0, buff);
+        memset(buff, 0, sizeof(buff));
+    }
+
+    int rc = pclose(fp);
+    char final_msg[128] = {0};
+
+    if(rc == -1)
+    {
+        snprintf(final_msg, sizeof(final_msg), "[ERROR] Fallo al cerrar proceso.\n");
+    }
+    else
+    {
+        if(WIFEXITED(rc))
+            snprintf(final_msg, sizeof(final_msg), "[OK] Tarea finalizada, código %d\n", WEXITSTATUS(rc));
+        else
+            snprintf(final_msg, sizeof(final_msg), "[OK] Tarea finalizada\n");
+    }
+
+    send_cliente(cli_fd, 0, final_msg);
+
+    pthread_mutex_lock(&mutex);
+    for(int i = 0; i < MAX_CL; i++)
+    {
+        if(lista_tareas[i].id != -1 && lista_tareas[i].id == req->task_id)
+        {
+            lista_tareas[i].estado = ESTADO_ESPERANDO;
+            lista_tareas[i].pid = 0;
+            break;
+        }
+    }
+    pthread_mutex_unlock(&mutex);
+}
 
 static void send_cliente(int cli_fd, int status, const char *mensaje)
 {
