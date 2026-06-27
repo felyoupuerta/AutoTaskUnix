@@ -116,7 +116,8 @@ void scheduler_list_task(char *buffer, size_t size)
     //(void)req;
 
     pthread_mutex_lock(&mutex);
-
+    //LIMPIAMOS EL BUFFER POR SI TIENE BASURA
+    buffer[0] = '\0';
 
     for(int i = 0; i < MAX_CL; i++)
     {
@@ -125,6 +126,7 @@ void scheduler_list_task(char *buffer, size_t size)
             continue;
         }
         char temp[256];
+
 
         snprintf(temp, sizeof(temp),
             "----------------------\n"
@@ -138,7 +140,10 @@ void scheduler_list_task(char *buffer, size_t size)
             lista_tareas[i].intervalo,
             state_to_text(lista_tareas[i].estado),
             lista_tareas[i].pid
+            
         );
+        
+        fflush(stdout);
         strncat(buffer, temp, size - strlen(buffer) - 1);
     }
     printf("--------------------------------------------\n");

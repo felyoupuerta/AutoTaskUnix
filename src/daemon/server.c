@@ -93,7 +93,10 @@ void* server_loop(void* arg)
                 printf("[INFO] Listado solicitado (Procesando...)\n");
 
                 status_out = 0;
-
+                
+                memset(msg_out, 0, sizeof(msg_out)); // Limpiamos el buffer antes de llenarlo
+                printf("[SERVER] buffer puesto a 0\n");
+                
                 scheduler_list_task(msg_out, sizeof(msg_out));
                 
                 fflush(stdout);
