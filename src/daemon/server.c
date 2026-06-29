@@ -138,6 +138,18 @@ void* server_loop(void* arg)
     return 0;
 }
 
+void leer_arc_conf(void)
+{
+
+}
+
+void sighup_handler(int signum)
+{
+    //BORRO TODAS LAS TAREAS DE LA RAM
+    scheduler_init();
+    guardar_tareas_en_archivo();
+}
+
 
 
 

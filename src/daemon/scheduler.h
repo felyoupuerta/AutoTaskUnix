@@ -56,4 +56,5 @@ int scheduler_comp_run(void);
 //FUNC GUARDAR DATOS DE TAREAS EN EL CONF
 void guardar_tareas_en_archivo(void);
 
+
 #endif /* scheduler.h */ 
