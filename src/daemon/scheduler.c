@@ -19,18 +19,6 @@ static void send_cliente(int cli_fd, int status, const char *mensaje);
 static Task lista_tareas[MAX_CL];
 static pthread_mutex_t mutex;
 
-/*
-typedef struct
-{
-    int id;
-    char cmd[M_BUFF_CMD];
-    int intervalo;
-    time_t last_run;
-    TaskStatus estado;
-    pid_t pid;
-} Task;
-
-*/
 void scheduler_init(void)
 {
     pthread_mutex_init(&mutex, NULL);
@@ -102,6 +90,7 @@ int scheduler_add_task(Request *req)
             lista_tareas[i].intervalo = req->s_intervalo;
             lista_tareas[i].last_run = 0;
             lista_tareas[i].estado = ESTADO_ESPERANDO;
+            lista_tareas[i].pid++;
 
             pthread_mutex_unlock(&mutex);
 
