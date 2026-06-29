@@ -11,19 +11,21 @@
 #include<sys/wait.h>
 #include<signal.h>
 #include"scheduler.h"
+#include"server.h"
 
 //función env respuestas por socket cliente
 static void send_cliente(int cli_fd, int status, const char *mensaje);
 
 
 static Task lista_tareas[MAX_CL];
-static pthread_mutex_t mutex;
+static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
 void scheduler_init(void)
 {
-    pthread_mutex_init(&mutex, NULL);
+    pthread_mutex_lock(&mutex);
 
-    for(int i = 0; i < MAX_CL; i++)
+    // 1. Inicialización normal de todas las tareas a valores vacíos/por defecto
+    for (int i = 0; i < MAX_CL; i++)
     {
         lista_tareas[i].id = -1;
         memset(lista_tareas[i].cmd, 0, sizeof(lista_tareas[i].cmd));
@@ -32,6 +34,41 @@ void scheduler_init(void)
         lista_tareas[i].pid = 0;
         lista_tareas[i].estado = ESTADO_ESPERANDO;
     }
+
+    // 2. Intentar abrir el archivo tasks.conf para leer las tareas guardadas
+    FILE *f = fopen(TASK_CONF, "r");
+    if (f == NULL)
+    {
+        // Si no existe, no es un error crítico; inicializamos por defecto y retornamos
+        printf("[SERVER] El archivo %s no existe o no se pudo abrir. Inicialización limpia.\n", TASK_CONF);
+        pthread_mutex_unlock(&mutex);
+        return;
+    }
+
+    char linea[512];
+    int i = 0;
+    int intervalo;
+    char cmd_aux[M_BUFF_CMD];
+    while (fgets(linea, sizeof(linea), f) != NULL)
+    {
+        if (i >= MAX_CL) break;
+        // Analizar intervalo y comando
+        if (sscanf(linea, "%d:%[^\n]", &intervalo, cmd_aux) == 2)
+        {
+            lista_tareas[i].id = i + 1;
+            lista_tareas[i].intervalo = intervalo;
+            strncpy(lista_tareas[i].cmd, cmd_aux, sizeof(lista_tareas[i].cmd) - 1);
+            lista_tareas[i].cmd[sizeof(lista_tareas[i].cmd) - 1] = '\0';
+            lista_tareas[i].estado = ESTADO_ESPERANDO;
+            lista_tareas[i].last_run = 0;
+            lista_tareas[i].pid = 0;
+            i++;
+        }
+    }
+    fclose(f);
+
+    printf("[SERVER] Se han cargado %d tareas del archivo %s.\n", i, TASK_CONF);
+    pthread_mutex_unlock(&mutex);
 }
 
 
@@ -52,7 +89,7 @@ void* scheduler_loop(void* arg)
 int scheduler_add_task(Request *req)
 {
     pthread_mutex_lock(&mutex);
-
+    
     for(int i = 0; i < MAX_CL; i++)
     {
         if(lista_tareas[i].id == -1)
@@ -250,7 +287,8 @@ static void send_cliente(int cli_fd, int status, const char *mensaje)
     res.status = status;
 
     // Copio el mensaje a buffer del struct
-    strncpy(res.response, mensaje, sizeof(res.response) - 1);
+    snprintf(res.response, sizeof(res.response), "%s", mensaje);
+    //strncpy(res.response, mensaje, sizeof(res.response) - 1);
     
     // Envwio la struct completa por el socket del cliente
     if (write(cli_fd, &res, sizeof(Response)) < 0) {
@@ -355,7 +393,7 @@ void guardar_tareas_en_archivo(void)
         
         if (lista_tareas[i].id != -1)
         {
-            fprintf(fp, "%d %s\n", lista_tareas[i].intervalo, lista_tareas[i].cmd);
+            fprintf(fp, "%d:%s\n", lista_tareas[i].intervalo, lista_tareas[i].cmd);
         }
     }
 

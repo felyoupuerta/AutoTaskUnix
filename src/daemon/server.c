@@ -20,7 +20,8 @@ static void send_cliente(int cli_fd, int status, const char *mensaje)
 {
     Response res = {0};
     res.status = status;
-    strncpy(res.response, mensaje, sizeof(res.response) - 1);
+    snprintf(res.response, sizeof(res.response), "%s", mensaje);
+    //strncpy(res.response, mensaje, sizeof(res.response) - 1);
     
     // Enviamos la estructura completa por el socket
     write(cli_fd, &res, sizeof(Response));
@@ -138,16 +139,13 @@ void* server_loop(void* arg)
     return 0;
 }
 
-void leer_arc_conf(void)
-{
-
-}
+  
 
 void sighup_handler(int signum)
 {
-    //BORRO TODAS LAS TAREAS DE LA RAM
+    (void)signum;
+    // RELEER EL ARCHIVO DE TASKS REINICIALIZANDO EL SCHEDULER
     scheduler_init();
-    guardar_tareas_en_archivo();
 }
 
 

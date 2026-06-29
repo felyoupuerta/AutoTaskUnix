@@ -9,6 +9,7 @@
 
 int main(void)
 {
+    signal(SIGHUP,sighup_handler);
     //INICIO EL SCHEDULER, LITA DE TAREAS CON ID -1, ETC ...
     scheduler_init();
     guardar_tareas_en_archivo();

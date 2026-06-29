@@ -12,8 +12,6 @@
 void* server_loop(void* arg);
 
 //MANEJADOR PARA LA SIGHUP
-sighup_handler(int signum)
+void sighup_handler(int signum);
 
-//LECTOR DEL FICHERO TASKS
-void leer_arc_conf(void)
 #endif /* server.h */ 
