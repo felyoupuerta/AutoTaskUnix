@@ -8,6 +8,7 @@
 
 
 #define SOCK_F "/tmp/taskDemonio.sock"
+#define TASK_CONF "tasks.conf"
 #define MAX_CL 20
 #define M_BUFF_CMD 256
 #define M_BUFF_S_RESPONSE 4096

@@ -9,7 +9,7 @@
 #include<pthread.h>
 #include<time.h>
 #include<sys/wait.h>
-
+#include<signal.h>
 #include"scheduler.h"
 
 //función env respuestas por socket cliente
@@ -27,9 +27,10 @@ void scheduler_init(void)
     {
         lista_tareas[i].id = -1;
         memset(lista_tareas[i].cmd, 0, sizeof(lista_tareas[i].cmd));
-        lista_tareas[i].intervalo = -1;
+        lista_tareas[i].intervalo = 5;
         lista_tareas[i].last_run = 0;
         lista_tareas[i].pid = 0;
+        lista_tareas[i].estado = ESTADO_ESPERANDO;
     }
 }
 
@@ -40,29 +41,7 @@ void* scheduler_loop(void* arg)
 
     while(1)
     {
-        time_t ahora = time(NULL);
-
-        pthread_mutex_lock(&mutex);
-
-        for(int i = 0; i < MAX_CL; i++)
-        {
-            if(lista_tareas[i].id != -1)
-            {
-                if(lista_tareas[i].estado == ESTADO_ESPERANDO)
-                {
-                    if((ahora - lista_tareas[i].last_run) >= lista_tareas[i].intervalo)
-                    {
-                        lista_tareas[i].estado = ESTADO_RUNNING;
-                        lista_tareas[i].last_run = ahora;
-
-                        printf("Ejecutando: %s\n", lista_tareas[i].cmd);
-                    }
-                }
-            }
-        }
-
-        pthread_mutex_unlock(&mutex);
-
+        scheduler_comp_run();
         sleep(1);
     }
 
@@ -94,10 +73,12 @@ int scheduler_add_task(Request *req)
 
             pthread_mutex_unlock(&mutex);
 
+            //ESCRIBIMOS EN EL TASKS.CONF LO ACTUAL
+            guardar_tareas_en_archivo();
+
             return 0;
         }
     }
-
     pthread_mutex_unlock(&mutex);
 
     return -1;
@@ -297,6 +278,9 @@ int scheduler_delete_task(Request *req)
         }
     }
     pthread_mutex_unlock(&mutex);
+    
+    guardar_tareas_en_archivo();
+
     return rc;
 }
 /*
@@ -310,30 +294,71 @@ typedef struct
     pid_t pid;
 } Task;
 */
-int scheduler_comp_run(Request *req)
+int scheduler_comp_run(void)
 {
     pthread_mutex_lock(&mutex);
 
-    int i = 0;
+    int resultado = -1;
+    time_t ahora = time(NULL);
 
-
-    for(i = 0;i < MAX_CL; i++)
+    for(int i = 0; i < MAX_CL; i++)
     {
-        if(lista_tareas[i].last_run >= lista_tareas[i].intervalo)
+        if(lista_tareas[i].id == -1)
         {
-            printf("[SCHEDULER] EL tiempo intervalo se ha cuimplido, hora de ejecutar la tarea programada\nd");
-            //PONEMOS EL LAST RUN DE NUEVO A 0 ACA O EN EL SERVER EST POR VERLO.
-            lista_tareas[i].last_run = 0;
-            system(lista_tareas[i].cmd);intervalo
-            return 1;
+            continue;
         }
-        else
+        if(lista_tareas[i].estado != ESTADO_ESPERANDO)
         {
-            return -1;
+            continue;
+        }
+
+        if((ahora - lista_tareas[i].last_run) >= lista_tareas[i].intervalo)
+        {
+            printf("TAREA -----> %s\n", lista_tareas[i].cmd);
+            printf("Ejecutando Tarea con ID: %d\n", lista_tareas[i].id);
+
+            lista_tareas[i].estado = ESTADO_RUNNING;
+            lista_tareas[i].last_run = ahora;
+            pid_t pid = fork();
+            if(pid < 0)
+            {
+                perror("[FORK ERROR]\n");
+            }
+            else if(pid == 0)
+            {
+                printf("Ejecutando tarea\n");
+                execl("/bin/sh", "sh", "-c", lista_tareas[i].cmd, (char *)NULL);
+                //el comando no existe o no se encontro
+                _exit(127);
+            }
+            printf("\n\n");
+            printf("Proceso Hijo para ejecucion de comandos creado: [%d]\n",pid);
+
+            lista_tareas[i].estado = ESTADO_ESPERANDO;
+            resultado = 0;
         }
     }
-    //DESBLOQUEO EL HILO ANTES DE SALIRME
-    pthread_mutex_unlock(&mutex);
-    return 0;
 
+    pthread_mutex_unlock(&mutex);
+    return resultado;
+}
+void guardar_tareas_en_archivo(void)
+{
+    FILE *fp = fopen(TASK_CONF, "w");
+    if (!fp) {
+        perror("[ERROR] No se pudo escribir en tasks.conf");
+        return;
+    }
+
+    for (int i = 0; i < MAX_CL; i++) 
+    {
+        
+        if (lista_tareas[i].id != -1)
+        {
+            fprintf(fp, "%d %s\n", lista_tareas[i].intervalo, lista_tareas[i].cmd);
+        }
+    }
+
+    fclose(fp);
+    printf("[SERVER] Archivo %s actualizado con éxito.\n", TASK_CONF);
 }

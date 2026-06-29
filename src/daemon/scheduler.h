@@ -10,13 +10,14 @@
 #include "protocol.h"
 /*orquestador*/
 
+//ENUM PARA EL ESTADO DE LAS TAREAS 
 typedef enum
 {
     ESTADO_ESPERANDO,
     ESTADO_ERROR,
     ESTADO_RUNNING
 } TaskStatus;
-
+//ESTRUCTUAR PARA LAS TAREAS
 typedef struct
 {
     int id;
@@ -27,8 +28,10 @@ typedef struct
     pid_t pid;
 } Task;
 
-
+//FUNC INICIALIZARR STRUCTS
 void scheduler_init(void);
+
+//FUNC LOOP INFINITO
 void* scheduler_loop(void* arg);
 
 // FUNCIONES DE CMD
@@ -48,7 +51,9 @@ void scheduler_run_task_stream(Request *req, int cli_fd);
 int scheduler_delete_task(Request *req);
 
 //FUNCION PARA VERIFICAR EL INTERVALO Y SI HA PASADO EJECUTO LA FUNCION DE RUN
-int scheduler_comp_run(Request *req);
+int scheduler_comp_run(void);
 
+//FUNC GUARDAR DATOS DE TAREAS EN EL CONF
+void guardar_tareas_en_archivo(void);
 
 #endif /* scheduler.h */ 

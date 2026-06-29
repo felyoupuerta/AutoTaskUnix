@@ -8,7 +8,7 @@
 #include<sys/socket.h>
 #include<sys/un.h>
 #include<string.h>
-
+#include<signal.h>
 /** MIOS **/
 #include "config.h"
 #include "scheduler.h"
@@ -28,6 +28,7 @@ static void send_cliente(int cli_fd, int status, const char *mensaje)
 
 void* server_loop(void* arg)
 {
+    signal(SIGCHLD, SIG_IGN);
     (void)arg;
     int sock = socket(AF_UNIX, SOCK_STREAM,0);
     if(sock < 0)
@@ -66,18 +67,10 @@ void* server_loop(void* arg)
             perror("[ERROR] Al aceptar cliente\n");
         }
         printf("! Cliente conectado!\n");
-
         //Inicializamos la estructura de REQUEST de tasks declarada en --> protocol.h
         Request req;
         ssize_t bytes_leidos = read(cli_fd,&req,sizeof(req));
-        int comparar = scheduler_comp_run(&req);
-        //SI ES UN ES QUE TUVO EXITO LA COMPARACION
-        //Y HAY QUE EJECUTAR NUEVAMENTE LÑA TAREA
-        if(comparar == 1)
-        {
-            printf("[TAREA] la tarea ha cumplido su intervalo\n");
-            printf("[TAREA] Se acaba de ejecutar\n");
-        }
+
         if(bytes_leidos <= 0)
         {
             perror("[ERROR] al recibir los datos por el socket\n");

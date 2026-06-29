@@ -11,7 +11,8 @@ int main(void)
 {
     //INICIO EL SCHEDULER, LITA DE TAREAS CON ID -1, ETC ...
     scheduler_init();
-
+    guardar_tareas_en_archivo();
+    
     //IDENTIFICADORES DEL HILO
     pthread_t hilo_scheduler;
     pthread_t hilo_server;
