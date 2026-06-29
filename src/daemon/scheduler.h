@@ -47,6 +47,8 @@ void scheduler_run_task_stream(Request *req, int cli_fd);
 //FUNC PARA BORRAR TAREAS USANDO SU ID
 int scheduler_delete_task(Request *req);
 
+//FUNCION PARA VERIFICAR EL INTERVALO Y SI HA PASADO EJECUTO LA FUNCION DE RUN
+int scheduler_comp_run(Request *req);
 
 
 #endif /* scheduler.h */ 

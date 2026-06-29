@@ -70,12 +70,21 @@ void* server_loop(void* arg)
         //Inicializamos la estructura de REQUEST de tasks declarada en --> protocol.h
         Request req;
         ssize_t bytes_leidos = read(cli_fd,&req,sizeof(req));
-
+        int comparar = scheduler_comp_run(&req);
+        //SI ES UN ES QUE TUVO EXITO LA COMPARACION
+        //Y HAY QUE EJECUTAR NUEVAMENTE LÑA TAREA
+        if(comparar == 1)
+        {
+            printf("[TAREA] la tarea ha cumplido su intervalo\n");
+            printf("[TAREA] Se acaba de ejecutar\n");
+        }
         if(bytes_leidos <= 0)
         {
             perror("[ERROR] al recibir los datos por el socket\n");
             close(cli_fd);
         }
+
+        
         switch(req.comando)
         {
             case CMD_ADD:
@@ -131,7 +140,6 @@ void* server_loop(void* arg)
         }
         //DEVOLVER DATOS AL CLIENTE ANTES DE CERRAR EL SOCKET
         send_cliente(cli_fd, status_out, msg_out);
-
         close(cli_fd);
     }
     return 0;

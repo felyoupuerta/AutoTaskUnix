@@ -299,3 +299,41 @@ int scheduler_delete_task(Request *req)
     pthread_mutex_unlock(&mutex);
     return rc;
 }
+/*
+typedef struct
+{
+    int id;
+    char cmd[M_BUFF_CMD];
+    int intervalo;
+    time_t last_run;
+    TaskStatus estado;
+    pid_t pid;
+} Task;
+*/
+int scheduler_comp_run(Request *req)
+{
+    pthread_mutex_lock(&mutex);
+
+    int i = 0;
+
+
+    for(i = 0;i < MAX_CL; i++)
+    {
+        if(lista_tareas[i].last_run >= lista_tareas[i].intervalo)
+        {
+            printf("[SCHEDULER] EL tiempo intervalo se ha cuimplido, hora de ejecutar la tarea programada\nd");
+            //PONEMOS EL LAST RUN DE NUEVO A 0 ACA O EN EL SERVER EST POR VERLO.
+            lista_tareas[i].last_run = 0;
+            system(lista_tareas[i].cmd);intervalo
+            return 1;
+        }
+        else
+        {
+            return -1;
+        }
+    }
+    //DESBLOQUEO EL HILO ANTES DE SALIRME
+    pthread_mutex_unlock(&mutex);
+    return 0;
+
+}
