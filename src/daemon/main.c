@@ -27,9 +27,6 @@ int main(void)
         perror("[ERROR] al crear el hilo de server_loop()\n");
         exit(EXIT_FAILURE);
     }
-
-
-    //ME QUEDO ESPERANDO A QUE EL HILO TERMINE, NO LO HARA NUNCA PQ ES UN WHILE(1)
     if(pthread_join(hilo_scheduler,NULL) != 0)
     {
         perror("[ERROR] al hacer el Join");
@@ -42,7 +39,5 @@ int main(void)
         perror("[ERROR] al hacer el Join del server");
         exit(EXIT_FAILURE);
     }
-
-
     return 0;
 } 

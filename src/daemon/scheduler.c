@@ -29,7 +29,7 @@ void scheduler_init(void)
         memset(lista_tareas[i].cmd, 0, sizeof(lista_tareas[i].cmd));
         lista_tareas[i].intervalo = -1;
         lista_tareas[i].last_run = 0;
-        lista_tareas[i].pid = -1;
+        lista_tareas[i].pid = 0;
     }
 }
 
