@@ -1,13 +1,16 @@
+/****************************************************/
+/*    PROGRAMA SERVER.C                             */
+/*                   FELIPE ANGERIZ ESTEFANELL      */
+/****************************************************/
 #include<stdio.h>
 #include<stdlib.h>
 #include<unistd.h>
 #include<sys/socket.h>
 #include<sys/un.h>
 #include<string.h>
-/** MIOS **/
 
+/** MIOS **/
 #include "config.h"
-//#include "protocol.h"
 #include "scheduler.h"
 #include "server.h"
 
@@ -94,7 +97,7 @@ void* server_loop(void* arg)
 
                 status_out = 0;
                 
-                memset(msg_out, 0, sizeof(msg_out)); // Limpiamos el buffer antes de llenarlo
+                memset(msg_out, 0, sizeof(msg_out)); // Limpio el buffer antes de llenarlo
                 printf("[SERVER] buffer puesto a 0\n");
                 
                 scheduler_list_task(msg_out, sizeof(msg_out));
@@ -127,7 +130,6 @@ void* server_loop(void* arg)
                 break;
         }
         //DEVOLVER DATOS AL CLIENTE ANTES DE CERRAR EL SOCKET
-
         send_cliente(cli_fd, status_out, msg_out);
 
         close(cli_fd);

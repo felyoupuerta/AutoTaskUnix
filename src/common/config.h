@@ -1,3 +1,7 @@
+/****************************************************/
+/*    HEADER CONFIG.H                               */
+/*                   FELIPE ANGERIZ ESTEFANELL      */
+/****************************************************/
 #ifndef _CONFIG_H
 #define _CONFIG_H
 

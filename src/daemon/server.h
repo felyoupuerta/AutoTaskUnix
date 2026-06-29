@@ -1,3 +1,7 @@
+/****************************************************/
+/*    HEADER SERVER.H                               */
+/*                   FELIPE ANGERIZ ESTEFANELL      */
+/****************************************************/
 #ifndef _SERVER_H
 #define _SERVER_H
 

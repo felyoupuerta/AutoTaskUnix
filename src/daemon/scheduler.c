@@ -1,3 +1,7 @@
+/****************************************************/
+/*    PROGRAMA SCHEDULER.C                          */
+/*                   FELIPE ANGERIZ ESTEFANELL      */
+/****************************************************/
 #include<stdio.h>
 #include<string.h>
 #include<stdlib.h>
@@ -8,7 +12,7 @@
 
 #include"scheduler.h"
 
-// Prototipo para la función estática que envía respuestas por socket
+//función env respuestas por socket cliente
 static void send_cliente(int cli_fd, int status, const char *mensaje);
 
 
@@ -275,10 +279,10 @@ static void send_cliente(int cli_fd, int status, const char *mensaje)
     Response res = {0};
     res.status = status;
 
-    // Copiamos el mensaje al buffer de la struct
+    // Copio el mensaje a buffer del struct
     strncpy(res.response, mensaje, sizeof(res.response) - 1);
     
-    // Enviamos la estructura completa por el socket del cliente
+    // Envwio la struct completa por el socket del cliente
     if (write(cli_fd, &res, sizeof(Response)) < 0) {
         perror("[ERROR] al enviar respuesta al cliente\n");
     }

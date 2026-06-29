@@ -1,3 +1,7 @@
+/****************************************************/
+/*    HEADER SCHEDULER.H                            */
+/*                   FELIPE ANGERIZ ESTEFANELL      */
+/****************************************************/
 #ifndef _SCHEDULER_H
 #define _SCHEDULER_H
 
