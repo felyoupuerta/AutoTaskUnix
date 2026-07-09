@@ -13,7 +13,7 @@
 #include "config.h"
 #include "scheduler.h"
 #include "server.h"
-
+#include "guarda_server_log.h"
 char msg_out[M_BUFF_S_RESPONSE] = {0};
 int status_out = 0;
 static void send_cliente(int cli_fd, int status, const char *mensaje)
@@ -134,6 +134,11 @@ void* server_loop(void* arg)
         }
         //DEVOLVER DATOS AL CLIENTE ANTES DE CERRAR EL SOCKET
         send_cliente(cli_fd, status_out, msg_out);
+
+        //ESCRIBO EN EL LOG DEL SERVIDOR
+        open_serv_log(cli_fd,status_out,msg_out);
+
+        //CERRAR FD DE EL CLIENTE
         close(cli_fd);
     }
     return 0;

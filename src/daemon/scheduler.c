@@ -204,7 +204,6 @@ void scheduler_run_task(Request *req)
             lista_tareas[i].estado = ESTADO_RUNNING;
 
             fflush(stdout);
-
             break;
         }
     }

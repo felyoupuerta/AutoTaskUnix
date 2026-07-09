@@ -25,7 +25,8 @@ COMMON_HEADERS := $(SRC_DIR)/common/protocol.h $(SRC_DIR)/common/config.h
 
 DAEMON_SRCS    := $(SRC_DIR)/daemon/main.c \
                   $(SRC_DIR)/daemon/scheduler.c \
-                  $(SRC_DIR)/daemon/server.c
+                  $(SRC_DIR)/daemon/server.c \
+                  $(SRC_DIR)/daemon/guarda_server_log.c
 
 CLIENT_SRCS    := $(SRC_DIR)/client/main.c \
                   $(SRC_DIR)/client/client.c
