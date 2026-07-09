@@ -129,13 +129,16 @@ void scheduler_list_task(char *buffer, size_t size)
     pthread_mutex_lock(&mutex);
     //LIMPIAMOS EL BUFFER POR SI TIENE BASURA
     buffer[0] = '\0';
+    int cont_vacias = 0;
 
     for(int i = 0; i < MAX_CL; i++)
     {
         if(lista_tareas[i].id == -1)
         {
+            cont_vacias++;
             continue;
         }
+
         char temp[256];
 
 
@@ -158,7 +161,10 @@ void scheduler_list_task(char *buffer, size_t size)
         strncat(buffer, temp, size - strlen(buffer) - 1);
     }
     printf("--------------------------------------------\n");
-
+    if(cont_vacias == MAX_CL)
+    {
+        snprintf(buffer,size,"No hay tareas registradas ahora mismop.\n");
+    }
 
     pthread_mutex_unlock(&mutex);
 }

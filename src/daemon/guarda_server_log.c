@@ -1,59 +1,44 @@
 /****************************************************/
-/*    FICHER C guarda_server_log                    */
-/*                   FELIPE ANGERIZ ESTEFANELL      */
+/* FICHER C guarda_server_log                       */
+/* FELIPE ANGERIZ ESTEFANELL                        */
 /****************************************************/
-#include"guarda_server_log.h"
-#include<stdio.h>
-#include<time.h>
+#include "guarda_server_log.h"
+#include <stdio.h>
+#include <time.h>
 
-/*
-int main(void)
+void open_serv_log(int cli_fd, int status, const char *mensaje)
 {
-  open_serv_log();
-}
-*/
+    time_t tiempoRaw;
+    struct tm *infoTiempo;
+    FILE *f;
+    
+    time(&tiempoRaw);
+    infoTiempo = localtime(&tiempoRaw);
 
-void open_serv_log(int cli_fd, int status,const char *mensaje)
-{
-  time_t tiempoRaw;
+    //Abro fichero modo append
+    f = fopen(R_SERVER_LOG, "a");
 
-  struct tm *infoTiempo;
-  
-  time(&tiempoRaw)
-  infoTiempo = localtime(&tiempoRaw);
-
-  /*
-    ESTRUCTURA tiempoRaw
-
-    infoTiempo -> tm_hour
-    infoTiempo -> tm_min
-    infoTiempo -> tm_sec
-    infoTiempo -> tm_mday
-    infoTiempo -> tm_mday
-    infoTiempo -> tm_min
-
-  */
-
-  FILE *f;
-
-
-
-  f = fopen(R_SERVER_LOG, "a");
-
-  if(f == NULL)
-  {
-    printf("[LOG ERROR] Error al abrir el ficher de log del servidor.\n");
-  }
-  else 
-  {
-    printf("[OK]Archivo abierto correctamente\n");
-  }
-  
-  fprintf(f,"%02d/%02d/%02d %02d:%02d:%02d %s",mensaje
-                                              
-
-
-          );
-  printf("Cerrrando FD de el fichero\n");
-  fclose(f);
+    if (f == NULL)
+    {
+        printf("[LOG ERROR] Error al abrir el fichero de log del servidor.\n");
+        return; // Salgo no se pudo abrir
+    }
+    else 
+    {
+        printf("[OK] Archivo de log abierto correctamente\n");
+    }
+    
+    fprintf(f, "%02d/%02d/%02d %02d:%02d:%02d [FD: %d] [STATUS: %d] -> %s\n",
+            infoTiempo->tm_mday,
+            infoTiempo->tm_mon + 1,      // tm_mon va de 0 a 11
+            infoTiempo->tm_year + 1900,  // tm_year cuenta desde 1900
+            infoTiempo->tm_hour,
+            infoTiempo->tm_min,
+            infoTiempo->tm_sec,
+            cli_fd,
+            status,
+            mensaje);
+              
+    printf("Cerrando FD del fichero de log\n");
+    fclose(f);
 }

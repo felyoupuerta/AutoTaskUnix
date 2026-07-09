@@ -144,7 +144,10 @@ void* server_loop(void* arg)
     return 0;
 }
 
-  
+void leer_arc_conf(void)
+{
+
+}
 
 void sighup_handler(int signum)
 {
