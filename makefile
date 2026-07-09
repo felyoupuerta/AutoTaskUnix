@@ -2,10 +2,7 @@ CC       := gcc
 CFLAGS   := -Wall -Wextra -Wpedantic -O2 -Isrc/common -Isrc/daemon -Isrc/client
 LDFLAGS  := -pthread
 
-# ==============================================================================
-#  Control de Verbose (Modo Detallado)
-# ==============================================================================
-# Por defecto es silencioso (V=0). Si ejecutas 'make V=1', se activará el modo detallado.
+#LO PONGO EN VERVOSE
 ifeq ($(V),1)
     Q :=
 else
@@ -50,9 +47,7 @@ daemon: $(DAEMON_BIN)
 # Compilar solo cliente
 client: $(CLIENT_BIN)
 
-# ==============================================================================
-#  Reglas de Enlazado (Linker)
-# ==============================================================================
+#LINKER
 
 $(DAEMON_BIN): $(DAEMON_OBJS)
 	$(Q)mkdir -p $(BIN_DIR)
@@ -64,9 +59,7 @@ $(CLIENT_BIN): $(CLIENT_OBJS)
 	@echo "==> Enlazando Cliente: $@"
 	$(Q)$(CC) $(CLIENT_OBJS) -o $@ $(LDFLAGS)
 
-# ==============================================================================
-#  Reglas de Compilación (Compilar objetos .o)
-# ==============================================================================
+#COMPILAR LOS .O
 
 # Compilar objetos del Demonio
 $(OBJ_DIR)/daemon/%.o: $(SRC_DIR)/daemon/%.c $(COMMON_HEADERS)
@@ -80,14 +73,11 @@ $(OBJ_DIR)/client/%.o: $(SRC_DIR)/client/%.c $(COMMON_HEADERS)
 	@echo "-> Compilando objeto del cliente: $<"
 	$(Q)$(CC) $(CFLAGS) -c $< -o $@
 
-# ==============================================================================
-#  Limpieza y Mantenimiento
-# ==============================================================================
+#LIMPIEZA
 
 clean:
 	@echo "Limpiando archivos de compilación..."
 	$(Q)rm -rf $(OBJ_DIR) $(BIN_DIR)
 	@echo "Limpieza completada."
 
-# Evita conflictos si existen archivos con estos nombres en la raíz
 .PHONY: all daemon client clean

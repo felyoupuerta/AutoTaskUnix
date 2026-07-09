@@ -11,7 +11,7 @@ void open_serv_log(int cli_fd, int status, const char *mensaje)
     time_t tiempoRaw;
     struct tm *infoTiempo;
     FILE *f;
-    
+
     time(&tiempoRaw);
     infoTiempo = localtime(&tiempoRaw);
 
@@ -28,7 +28,7 @@ void open_serv_log(int cli_fd, int status, const char *mensaje)
         printf("[OK] Archivo de log abierto correctamente\n");
     }
     
-    fprintf(f, "%02d/%02d/%02d %02d:%02d:%02d [FD: %d] [STATUS: %d] -> %s\n",
+    fprintf(f, "[FECHA %02d/%02d/%02d] [HORA: %02d:%02d:%02d] [FD: %d] [STATUS: %d] -> %s\n",
             infoTiempo->tm_mday,
             infoTiempo->tm_mon + 1,      // tm_mon va de 0 a 11
             infoTiempo->tm_year + 1900,  // tm_year cuenta desde 1900
