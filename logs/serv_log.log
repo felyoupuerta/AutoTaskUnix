@@ -1,107 +1,11 @@
-[OK] Tarea añadida correctamente.
-----------------------
+[FECHA 09/07/2026] [HORA: 12:44:09] [FD: 4] [STATUS: 0] -> [SALIDA][OK] Tarea añadida correctamente.
+
+[FECHA 09/07/2026] [HORA: 12:51:34] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA]----------------------
 ID: 1
-CMD: ls -l
-Intervalo: 50
-Estado: ESPERANDO
-PID: 1
-[OK]Tarea eliminada de la lista correcrtamente.
-09/07/2026 12:17:36 [FD: 4] [STATUS: 0] -> 
-09/07/2026 12:24:33 [FD: 4] [STATUS: 0] -> No hay tareas registradas ahora mismop.
-
-09/07/2026 12:24:45 [FD: 4] [STATUS: 0] -> [OK] Tarea añadida correctamente.
-
-09/07/2026 12:24:55 [FD: 4] [STATUS: 0] -> ----------------------
-ID: 1
-CMD: ls -l
-Intervalo: 299
-Estado: ESPERANDO
-PID: 1
-
-09/07/2026 12:25:25 [FD: 4] [STATUS: 0] -> ----------------------
-ID: 1
-CMD: ls -l
-Intervalo: 299
-Estado: ESPERANDO
-PID: 1
-
-09/07/2026 12:25:32 [FD: 4] [STATUS: 0] -> ----------------------
-ID: 1
-CMD: ls -l
-Intervalo: 299
-Estado: ESPERANDO
-PID: 1
-
-09/07/2026 12:25:42 [FD: 4] [STATUS: 0] -> ----------------------
-ID: 1
-CMD: ls -l
-Intervalo: 299
-Estado: ESPERANDO
-PID: 1
-
-09/07/2026 12:25:51 [FD: 4] [STATUS: 0] -> ----------------------
-ID: 1
-CMD: ls -l
-Intervalo: 299
-Estado: ESPERANDO
-PID: 1
-
-09/07/2026 12:25:54 [FD: 4] [STATUS: 0] -> [OK]Tarea eliminada de la lista correcrtamente.
-
-09/07/2026 12:25:57 [FD: 4] [STATUS: 0] -> No hay tareas registradas ahora mismop.
-
-09/07/2026 12:26:09 [FD: 4] [STATUS: 0] -> [OK] Tarea añadida correctamente.
-
-09/07/2026 12:26:23 [FD: 4] [STATUS: 0] -> [OK] Tarea añadida correctamente.
-
-09/07/2026 12:26:29 [FD: 4] [STATUS: 0] -> [OK] Tarea añadida correctamente.
-
-09/07/2026 12:26:37 [FD: 4] [STATUS: 0] -> [OK] Tarea añadida correctamente.
-
-09/07/2026 12:26:46 [FD: 4] [STATUS: 0] -> [OK] Tarea añadida correctamente.
-
-09/07/2026 12:26:50 [FD: 4] [STATUS: 0] -> ----------------------
-ID: 1
-CMD: ip a
-Intervalo: 22
+CMD: ls -lrt
+Intervalo: 500
 Estado: ESPERANDO
 PID: 0
-----------------------
-ID: 2
-CMD: ls
-Intervalo: 5000
-Estado: ESPERANDO
-PID: 1
-----------------------
-ID: 3
-CMD: ls -lr
-Intervalo: 1000
-Estado: ESPERANDO
-PID: 1
-----------------------
-ID: 4
-CMD: ip a
-Intervalo: 80000
-Estado: ESPERANDO
-PID: 1
-----------------------
-ID: 5
-CMD: whoami
-Intervalo: 10000
-Estado: ESPERANDO
-PID: 1
 
-09/07/2026 12:27:10 [FD: 4] [STATUS: 0] -> [OK]Tarea eliminada de la lista correcrtamente.
-
-09/07/2026 12:27:14 [FD: 4] [STATUS: 0] -> [OK]Tarea eliminada de la lista correcrtamente.
-
-09/07/2026 12:27:16 [FD: 4] [STATUS: 0] -> [OK]Tarea eliminada de la lista correcrtamente.
-
-09/07/2026 12:27:17 [FD: 4] [STATUS: 0] -> [OK]Tarea eliminada de la lista correcrtamente.
-
-09/07/2026 12:27:20 [FD: 4] [STATUS: 0] -> [OK]Tarea eliminada de la lista correcrtamente.
-
-09/07/2026 12:27:22 [FD: 4] [STATUS: 0] -> No hay tareas registradas ahora mismop.
-
-09/07/2026 12:27:24 [FD: 4] [STATUS: 0] -> No hay tareas registradas ahora mismop.
+[FECHA 09/07/2026] [HORA: 12:51:42] [FD: 4] [STATUS: 0] [CMD: 108]-> [SALIDA][OK] Tarea añadida correctamente.
 

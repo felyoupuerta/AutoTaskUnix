@@ -136,7 +136,7 @@ void* server_loop(void* arg)
         send_cliente(cli_fd, status_out, msg_out);
 
         //ESCRIBO EN EL LOG DEL SERVIDOR
-        open_serv_log(cli_fd,status_out,msg_out);
+        open_serv_log(cli_fd,status_out,*req.cmd,msg_out);
 
         //CERRAR FD DE EL CLIENTE
         close(cli_fd);
