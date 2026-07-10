@@ -18,6 +18,12 @@ typedef enum
     ESTADO_RUNNING
 } TaskStatus;
 
+typedef enum
+{
+    TIPO_INTERVALO,
+    TIPO_FIJO
+}TaskType;
+
 //TAREAS
 typedef struct
 {
@@ -27,6 +33,10 @@ typedef struct
     time_t last_run;
     TaskStatus estado;
     pid_t pid;
+    TaskType tipo;
+    int h;
+    int m;
+    int s;
 } Task;
 
 

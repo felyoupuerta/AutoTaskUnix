@@ -15,7 +15,7 @@
 #include "server.h"
 #include "guarda_server_log.h"
 char msg_out[M_BUFF_S_RESPONSE] = {0};
-int status_out = 0;
+//int status_out = 0;
 static void send_cliente(int cli_fd, int status, const char *mensaje)
 {
     Response res = {0};
@@ -62,10 +62,12 @@ void* server_loop(void* arg)
 
     while(1)
     {
+        int status_out = 0;
         int cli_fd = accept(sock,(struct sockaddr *)&cl_addr,&tam);
         if(cli_fd < 0)
         {
             perror("[ERROR] Al aceptar cliente\n");
+            continue;
         }
         printf("! Cliente conectado!\n");
 
@@ -76,6 +78,7 @@ void* server_loop(void* arg)
         {
             perror("[ERROR] al recibir los datos por el socket\n");
             close(cli_fd);
+            continue;
         }
 
         
@@ -112,13 +115,16 @@ void* server_loop(void* arg)
                 {
                     printf("Error al borrar la tarea con ID: %d\n",req.task_id);
                     snprintf(msg_out,sizeof(msg_out), "[BAD] Error al borrar la tarea.\n");
+                    status_out = -1;
                 }
                 else
                 {
                     snprintf(msg_out,sizeof(msg_out), "[OK]Tarea eliminada de la lista correcrtamente.\n");
+                    status_out = 0;
                 }
                 break;
             case CMD_RUN:
+
                 printf("[SERVER] HAS ELEGIDO CMD_RUN\n");
                 
                 scheduler_run_task_stream(&req, cli_fd);

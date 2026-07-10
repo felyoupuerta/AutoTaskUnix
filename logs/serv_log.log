@@ -109,3 +109,47 @@ PID: 0
 
 [FECHA 10/07/2026] [HORA: 12:31:02] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA][OK]Tarea eliminada de la lista correcrtamente.
 
+[FECHA 10/07/2026] [HORA: 12:43:39] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA][BAD] Error al borrar la tarea.
+
+[FECHA 10/07/2026] [HORA: 12:56:11] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA]No hay tareas registradas ahora mismop.
+
+[FECHA 10/07/2026] [HORA: 12:56:22] [FD: 4] [STATUS: -1] [CMD: 0]-> [SALIDA][BAD] Error al borrar la tarea.
+
+[FECHA 10/07/2026] [HORA: 12:58:39] [FD: 4] [STATUS: 0] [CMD: 108]-> [SALIDA][OK] Tarea añadida correctamente.
+
+[FECHA 10/07/2026] [HORA: 12:58:43] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA]1    ls -l                     9000       ESPERANDO    1     
+
+[FECHA 10/07/2026] [HORA: 13:01:24] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA]ID   COMMAND                   INTERVAL   STATUS       PID   
+----------------------------------------------------------------------
+1    ls -l                     9000       ESPERANDO    0     
+
+[FECHA 10/07/2026] [HORA: 13:01:31] [FD: 4] [STATUS: 0] [CMD: 105]-> [SALIDA][OK] Tarea añadida correctamente.
+
+[FECHA 10/07/2026] [HORA: 13:01:34] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA]ID   COMMAND                   INTERVAL   STATUS       PID   
+----------------------------------------------------------------------
+1    ls -l                     9000       ESPERANDO    0     
+2    ip a                      998        ESPERANDO    1     
+
+[FECHA 10/07/2026] [HORA: 13:02:11] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA]ID   COMANDO                   INTERVALO  ESTADO       PID   
+----------------------------------------------------------------------
+1    ls -l                     9000       ESPERANDO    0     
+2    ip a                      998        ESPERANDO    0     
+
+[FECHA 10/07/2026] [HORA: 13:02:31] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA][OK]Tarea eliminada de la lista correcrtamente.
+
+[FECHA 10/07/2026] [HORA: 13:02:33] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA][OK]Tarea eliminada de la lista correcrtamente.
+
+[FECHA 10/07/2026] [HORA: 13:02:37] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA]No hay tareas registradas ahora mismo.
+
+[FECHA 10/07/2026] [HORA: 13:02:59] [FD: 4] [STATUS: 0] [CMD: 105]-> [SALIDA][OK] Tarea añadida correctamente.
+
+[FECHA 10/07/2026] [HORA: 13:03:10] [FD: 4] [STATUS: 0] [CMD: 105]-> [SALIDA][OK] Tarea añadida correctamente.
+
+[FECHA 10/07/2026] [HORA: 13:03:22] [FD: 4] [STATUS: 0] [CMD: 99]-> [SALIDA][OK] Tarea añadida correctamente.
+
+[FECHA 10/07/2026] [HORA: 13:03:26] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA]ID   COMANDO                   INTERVALO  ESTADO       PID   
+----------------------------------------------------------------------
+1    ip a                      0          ESPERANDO    1     
+2    ip a                      999        ESPERANDO    1     
+3    cat /etc/passwd           9898989    ESPERANDO    1     
+

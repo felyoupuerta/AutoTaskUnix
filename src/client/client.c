@@ -54,11 +54,13 @@ int send_request(Request *req)
     Response resp = {0};
 
     ssize_t n;
+    int ultimo_status = 0;
     while((n = read(fd_sck, &resp, sizeof(Response))) > 0)
     {
         
         printf("%s", resp.response);
         fflush(stdout);
+        ultimo_status = resp.status;
         memset(&resp, 0, sizeof(resp));
     }
 
@@ -68,5 +70,5 @@ int send_request(Request *req)
     }
 
     close(fd_sck);
-    return 0;
+    return ultimo_status;
 }

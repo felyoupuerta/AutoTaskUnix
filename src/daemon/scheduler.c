@@ -124,12 +124,19 @@ int scheduler_add_task(Request *req)
 
 void scheduler_list_task(char *buffer, size_t size)
 {
-    
-
     pthread_mutex_lock(&mutex);
     
     buffer[0] = '\0';
     int cont_vacias = 0;
+
+    // 1. Añadir la cabecera alineada al inicio del buffer si hay espacio
+    char cabecera[256];
+    snprintf(cabecera, sizeof(cabecera),
+        "%-4s %-25s %-10s %-12s %-6s\n"
+        "----------------------------------------------------------------------\n",
+        "ID", "COMANDO", "INTERVALO", "ESTADO", "PID"
+    );
+    strncat(buffer, cabecera, size - strlen(buffer) - 1);
 
     for(int i = 0; i < MAX_CL; i++)
     {
@@ -141,29 +148,22 @@ void scheduler_list_task(char *buffer, size_t size)
 
         char temp[256];
 
-
         snprintf(temp, sizeof(temp),
-            "----------------------\n"
-            "ID: %d\n"
-            "CMD: %s\n"
-            "Intervalo: %d\n"
-            "Estado: %s\n"
-            "PID: %d\n",
+            "%-4d %-25s %-10d %-12s %-6d\n",
             lista_tareas[i].id,
             lista_tareas[i].cmd,
             lista_tareas[i].intervalo,
             state_to_text(lista_tareas[i].estado),
             lista_tareas[i].pid
-            
         );
         
-        fflush(stdout);
         strncat(buffer, temp, size - strlen(buffer) - 1);
     }
-    printf("--------------------------------------------\n");
+    
+    // 2. Si no había tareas, borramos la cabecera y mostramos el mensaje limpio
     if(cont_vacias == MAX_CL)
     {
-        snprintf(buffer,size,"No hay tareas registradas ahora mismop.\n");
+        snprintf(buffer, size, "No hay tareas registradas ahora mismo.\n");
     }
 
     pthread_mutex_unlock(&mutex);
@@ -333,42 +333,81 @@ int scheduler_comp_run(void)
 
     int resultado = -1;
     time_t ahora = time(NULL);
+    //ESTRUCTURA PARA FECHA HORA,ETC, DE MANERA ORGANIZADA
+    struct tm *infoTiempo = localtime(&ahora);
 
+    
     for(int i = 0; i < MAX_CL; i++)
     {
         if(lista_tareas[i].id == -1)
         {
             continue;
         }
+        
         if(lista_tareas[i].estado != ESTADO_ESPERANDO)
         {
             continue;
         }
-
-        if((ahora - lista_tareas[i].last_run) >= lista_tareas[i].intervalo)
+        
+        if(lista_tareas[i].tipo == TIPO_INTERVALO)
         {
-            printf("TAREA -----> %s\n", lista_tareas[i].cmd);
-            printf("Ejecutando Tarea con ID: %d\n", lista_tareas[i].id);
-
-            lista_tareas[i].estado = ESTADO_RUNNING;
-            lista_tareas[i].last_run = ahora;
-            pid_t pid = fork();
-            if(pid < 0)
+            if((ahora - lista_tareas[i].last_run) >= lista_tareas[i].intervalo)
             {
-                perror("[FORK ERROR]\n");
-            }
-            else if(pid == 0)
-            {
-                printf("Ejecutando tarea\n");
-                execl("/bin/sh", "sh", "-c", lista_tareas[i].cmd, (char *)NULL);
-                //el comando no existe o no se encontro
-                _exit(127);
-            }
-            printf("\n\n");
-            printf("Proceso Hijo para ejecucion de comandos creado: [%d]\n",pid);
+                printf("TAREA -----> %s\n", lista_tareas[i].cmd);
+                printf("Ejecutando Tarea con ID: %d\n", lista_tareas[i].id);
 
-            lista_tareas[i].estado = ESTADO_ESPERANDO;
-            resultado = 0;
+                lista_tareas[i].estado = ESTADO_RUNNING;
+                lista_tareas[i].last_run = ahora;
+                pid_t pid = fork();
+                if(pid < 0)
+                {
+                    perror("[FORK ERROR]\n");
+                }
+                else if(pid == 0)
+                {
+                    printf("Ejecutando tarea\n");
+                    execl("/bin/sh", "sh", "-c", lista_tareas[i].cmd, (char *)NULL);
+                    //el comando no existe o no se encontro
+                    _exit(127);
+                }
+                printf("\n\n");
+                printf("Proceso Hijo para ejecucion de comandos creado: [%d]\n",pid);
+
+                lista_tareas[i].estado = ESTADO_ESPERANDO;
+                resultado = 0;
+            }
+        }
+        
+        else if(lista_tareas[i].tipo == TIPO_FIJO)
+        {
+            if(lista_tareas[i].h == infoTiempo->tm_hour && lista_tareas[i].m == infoTiempo->tm_min && lista_tareas[i].s == infoTiempo->tm_sec)
+            {
+                printf("TAREA -----> %s\n", lista_tareas[i].cmd);
+                printf("Ejecutando Tarea con ID: %d\n", lista_tareas[i].id);
+                lista_tareas[i].estado = ESTADO_RUNNING;
+                lista_tareas[i].last_run = ahora;
+                pid_t pid = fork();
+                if(pid < 0)
+                {
+                    perror("[FORK ERROR]\n");
+                }
+                else if(pid == 0)
+                {
+                    printf("Ejecutando tarea\n");
+                    execl("/bin/sh", "sh", "-c", lista_tareas[i].cmd, (char *)NULL);
+                    _exit(127);
+                }
+                printf("\n\n");
+                printf("Proceso Hijo para ejecucion de comandos creado: [%d]\n",pid);
+                lista_tareas[i].estado = ESTADO_ESPERANDO;
+                resultado = 0;
+            }
+
+        }
+        
+        else
+        {
+            printf("Tipo de tarea no válido.\n");
         }
     }
 

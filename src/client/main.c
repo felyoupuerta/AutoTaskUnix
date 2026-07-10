@@ -72,16 +72,13 @@ int main(int argc, char **argv)
         if(*end != '\n' && *end != '\0')
         {
             printf("No es un numero valido\n");
+            req.s_intervalo = 5;
         }
         else
         {
             if (valor == 0) req.s_intervalo = 5;
             else req.s_intervalo = (int)valor;
         }
-
-
-
-
     }
     else if(strncmp(argv[1],"run",3) == 0 || strcmp(argv[1],"x") == 0)
     {
@@ -127,8 +124,9 @@ int main(int argc, char **argv)
         exit(EXIT_FAILURE);
     }
 
-    send_request(&req);
+    int rc = send_request(&req);
 
+    return rc;
 
-    return 0;
+    
 }
