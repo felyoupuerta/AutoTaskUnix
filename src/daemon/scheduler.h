@@ -18,11 +18,6 @@ typedef enum
     ESTADO_RUNNING
 } TaskStatus;
 
-typedef enum
-{
-    TIPO_INTERVALO,
-    TIPO_FIJO
-}TaskType;
 
 //TAREAS
 typedef struct

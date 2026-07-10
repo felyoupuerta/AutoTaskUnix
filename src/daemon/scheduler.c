@@ -89,20 +89,25 @@ void* scheduler_loop(void* arg)
 int scheduler_add_task(Request *req)
 {
     pthread_mutex_lock(&mutex);
-    
     for(int i = 0; i < MAX_CL; i++)
     {
         if(lista_tareas[i].id == -1)
         {
             lista_tareas[i].id = i + 1;
 
-            snprintf(lista_tareas[i].cmd,
-                    sizeof(lista_tareas[i].cmd),
-                    "%s",
-                    req->cmd);
+            snprintf(lista_tareas[i].cmd,sizeof(lista_tareas[i].cmd),"%s",req->cmd);
+
+            
+            lista_tareas[i].tipo = req->tipo;
+            
+            if(lista_tareas[i].tipo == TIPO_FIJO)
+            {
+              lista_tareas[i].h = req->h;
+              lista_tareas[i].m = req->m;
+              lista_tareas[i].s = req->s;
+            }
 
             lista_tareas[i].cmd[M_BUFF_CMD - 1] = '\0';
-
             lista_tareas[i].intervalo = req->s_intervalo;
             lista_tareas[i].last_run = 0;
             lista_tareas[i].estado = ESTADO_ESPERANDO;
@@ -117,7 +122,6 @@ int scheduler_add_task(Request *req)
         }
     }
     pthread_mutex_unlock(&mutex);
-
     return -1;
 }
 

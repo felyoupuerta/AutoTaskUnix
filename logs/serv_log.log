@@ -153,3 +153,32 @@ PID: 0
 2    ip a                      999        ESPERANDO    1     
 3    cat /etc/passwd           9898989    ESPERANDO    1     
 
+[FECHA 10/07/2026] [HORA: 14:39:24] [FD: 3] [STATUS: 0] [CMD: 0]-> [SALIDA]ID   COMANDO                   INTERVALO  ESTADO       PID   
+----------------------------------------------------------------------
+1    ip a                      0          ESPERANDO    0     
+2    ip a                      999        ESPERANDO    0     
+3    cat /etc/passwd           9898989    ESPERANDO    0     
+
+[FECHA 10/07/2026] [HORA: 14:39:32] [FD: 3] [STATUS: 0] [CMD: 0]-> [SALIDA][OK]Tarea eliminada de la lista correcrtamente.
+
+[FECHA 10/07/2026] [HORA: 14:39:34] [FD: 3] [STATUS: 0] [CMD: 0]-> [SALIDA][OK]Tarea eliminada de la lista correcrtamente.
+
+[FECHA 10/07/2026] [HORA: 14:39:38] [FD: 3] [STATUS: 0] [CMD: 0]-> [SALIDA][OK]Tarea eliminada de la lista correcrtamente.
+
+[FECHA 10/07/2026] [HORA: 14:39:42] [FD: 3] [STATUS: 0] [CMD: 0]-> [SALIDA]No hay tareas registradas ahora mismo.
+
+[FECHA 10/07/2026] [HORA: 14:40:45] [FD: 3] [STATUS: 0] [CMD: 108]-> [SALIDA][OK] Tarea añadida correctamente.
+
+[FECHA 10/07/2026] [HORA: 14:40:50] [FD: 3] [STATUS: 0] [CMD: 0]-> [SALIDA]ID   COMANDO                   INTERVALO  ESTADO       PID   
+----------------------------------------------------------------------
+1    ls -lrta                  0          ESPERANDO    0     
+
+[FECHA 10/07/2026] [HORA: 14:41:54] [FD: 4] [STATUS: 0] [CMD: 105]-> [SALIDA][OK] Tarea añadida correctamente.
+
+[FECHA 10/07/2026] [HORA: 14:42:06] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA]ID   COMANDO                   INTERVALO  ESTADO       PID   
+----------------------------------------------------------------------
+1    ls -lrta                  0          ESPERANDO    0     
+2    ip a                      0          ESPERANDO    1     
+
+[FECHA 10/07/2026] [HORA: 14:42:14] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA][OK]Tarea eliminada de la lista correcrtamente.
+

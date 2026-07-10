@@ -37,14 +37,14 @@ int main(int argc, char **argv)
 
         printf("  [Comando]    / [Atajo]      Descripción\n");
         printf("  --------------------------------------------------------------\n");
-        printf("  • list       | ls           Muestra la lista de tareas\n");
-        printf("  • add        | a            Añade una nueva tarea\n");
-        printf("  • run        | x <id>       Ejecuta una tarea por su ID\n");
-        printf("  • delete     | rm <id>      Elimina una tarea por su ID\n\n");
-
-        printf("------------------------------------------------------------------\n");
-        printf("Usar: './bin/taskctl help' para ver la ayuda detallada.\n");
-        printf("==================================================================\n");
+        printf("  • list       | ls           Muestra la lista de tareas\n"        );
+        printf("  • add        | a            Tarea con INTERVALO\n"               );
+        printf("  • at         | at           Tarea con HORA FIJA\n"               );
+        printf("  • run        | x <id>       Ejecuta una tarea por su ID\n"       );
+        printf("  • delete     | rm <id>      Elimina una tarea por su ID\n\n"     );
+        printf("----------------------------------------------------------------\n");
+        printf("Usar: './bin/taskctl help' para ver la ayuda detallada.\n"         );
+        printf("================================================================\n");
         exit(argc < 2 ? EXIT_FAILURE : EXIT_SUCCESS);
     }
 
@@ -80,6 +80,58 @@ int main(int argc, char **argv)
             else req.s_intervalo = (int)valor;
         }
     }
+    
+    else if(strncmp(argv[1],"at",2) == 0 )
+    {
+        int hor, min, sec;
+        printf("Opcion escogida: AT\n");
+        req.comando = CMD_ADD;
+        req.tipo = TIPO_FIJO;
+        printf("Comando: \n");
+        fgets(command, sizeof(command), stdin);
+        command[strcspn(command, "\n")] = 0;
+        strcpy(req.cmd,command);
+        printf("Añadir hora exacta de ejecucion: \n");
+        printf("\n > Hora: ");
+        scanf("%d",&hor);
+        if(hor >= 0 && hor <= 23)
+        {
+            //NO HAGO NADA
+        }
+        else
+        {
+            printf("Error en la hora ingresada, debe ser entre 0 y 23\n");
+            exit(EXIT_FAILURE);
+        }
+        printf("\n > Minutos: ");
+        scanf("%d",&min);
+        if(min >= 0 && min <= 59)
+        {
+            //NO HAGO NADA
+        }
+        else
+        {
+            printf("Error en el minuto ingresado, debe estar entre el 0 y el 59\n");
+            exit(EXIT_FAILURE);
+        }
+        printf("\n > Segundos: ");
+        scanf("%d",&sec);
+        if(sec >= 0 && sec <= 59)
+        {
+            //NO HAGO NADA
+        }
+
+        else
+        {
+            printf("Error en los segundos ingresados, deben estar entre 0 y 59\n");
+            exit(EXIT_FAILURE);
+        }
+
+        req.h = hor;
+        req.m = min;
+        req.s = sec;
+        }
+
     else if(strncmp(argv[1],"run",3) == 0 || strcmp(argv[1],"x") == 0)
     {
         if(argc< 3)

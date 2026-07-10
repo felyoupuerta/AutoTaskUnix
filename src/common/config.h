@@ -23,5 +23,10 @@
 #define S_LOG "logs/C_LOG.log"
 #define C_LOG "logs/S_LOG.log"
 
+//RETORNOS
+#define H_ERROR 11 //RETORNO ERROR DE HORAS
+#define M_ERROR 22 //RETORNO ERROR DE MINUTOS
+#define S_ERROR 33 //RETORNO ERROR DE SEGUNDOS
+
 
 #endif /* config.h */
