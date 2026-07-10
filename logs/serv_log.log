@@ -9,3 +9,62 @@ PID: 0
 
 [FECHA 09/07/2026] [HORA: 12:51:42] [FD: 4] [STATUS: 0] [CMD: 108]-> [SALIDA][OK] Tarea añadida correctamente.
 
+[FECHA 10/07/2026] [HORA: 11:26:22] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA]----------------------
+ID: 1
+CMD: ls -lrt
+Intervalo: 500
+Estado: ESPERANDO
+PID: 0
+----------------------
+ID: 2
+CMD: ls -lrta
+Intervalo: 100
+Estado: ESPERANDO
+PID: 0
+
+[FECHA 10/07/2026] [HORA: 11:26:33] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA][OK]Tarea eliminada de la lista correcrtamente.
+
+[FECHA 10/07/2026] [HORA: 11:26:36] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA]----------------------
+ID: 2
+CMD: ls -lrta
+Intervalo: 100
+Estado: ESPERANDO
+PID: 0
+
+[FECHA 10/07/2026] [HORA: 11:26:39] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA][OK]Tarea eliminada de la lista correcrtamente.
+
+[FECHA 10/07/2026] [HORA: 11:26:42] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA]No hay tareas registradas ahora mismop.
+
+[FECHA 10/07/2026] [HORA: 11:29:06] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA]No hay tareas registradas ahora mismop.
+
+[FECHA 10/07/2026] [HORA: 11:29:15] [FD: 4] [STATUS: 0] [CMD: 108]-> [SALIDA][OK] Tarea añadida correctamente.
+
+[FECHA 10/07/2026] [HORA: 11:29:25] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA]----------------------
+ID: 1
+CMD: ls
+Intervalo: 10
+Estado: ESPERANDO
+PID: 1
+
+[FECHA 10/07/2026] [HORA: 11:29:33] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA]----------------------
+ID: 1
+CMD: ls
+Intervalo: 10
+Estado: ESPERANDO
+PID: 0
+
+[FECHA 10/07/2026] [HORA: 11:32:32] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA]----------------------
+ID: 1
+CMD: ls
+Intervalo: 10
+Estado: ESPERANDO
+PID: 0
+
+[FECHA 10/07/2026] [HORA: 11:32:35] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA][OK]Tarea eliminada de la lista correcrtamente.
+
+[FECHA 10/07/2026] [HORA: 11:38:12] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA]No hay tareas registradas ahora mismop.
+
+[FECHA 10/07/2026] [HORA: 11:38:52] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA]No hay tareas registradas ahora mismop.
+
+[FECHA 10/07/2026] [HORA: 11:39:27] [FD: 4] [STATUS: 0] [CMD: 108]-> [SALIDA][OK] Tarea añadida correctamente.
+

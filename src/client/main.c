@@ -22,26 +22,39 @@ int main(int argc, char **argv)
     char *end;
     Request req = {0}; //LE RESERVAMOS MEMORIA REAL
 
-    if(argc < 2)
+    if(argc < 2 || strcmp(argv[1], "help") == 0 || strcmp(argv[1], "--help") == 0)
     {
+        if(argc < 2)
+        {
+            printf("[ERROR] Debes pasar al menos 1 argumento.\n");
+        }
+
         printf("==================================================================\n");
-        printf("Error en el paso de argumentos\n");
-        printf("Para que el programa funcione debes pasar al menos 1 argumento\n");
-        printf("1- ./bin/taskctl list\n");
-        printf("2- ./bin/taskctl add <comando>\n");
-        printf("3- ./bin/taskctl run <id>\n");
-        printf("4- ./bin/taskctl delete <id>\n");
+        printf(" COMANDOS DISPONIBLES (Puedes usar el comando o su atajo)\n");
+        printf("==================================================================\n\n");
+
+        printf("  Formato: ./bin/taskctl [comando] <argumentos>\n\n");
+
+        printf("  [Comando]    / [Atajo]      Descripción\n");
+        printf("  --------------------------------------------------------------\n");
+        printf("  • list       | ls           Muestra la lista de tareas\n");
+        printf("  • add        | a            Añade una nueva tarea\n");
+        printf("  • run        | x <id>       Ejecuta una tarea por su ID\n");
+        printf("  • delete     | rm <id>      Elimina una tarea por su ID\n\n");
+
+        printf("------------------------------------------------------------------\n");
+        printf("Usar: './bin/taskctl help' para ver la ayuda detallada.\n");
         printf("==================================================================\n");
-        exit(EXIT_FAILURE);
+        exit(argc < 2 ? EXIT_FAILURE : EXIT_SUCCESS);
     }
 
 
-    if(strncmp(argv[1],"list",4) == 0)
+    if(strncmp(argv[1],"list",4) == 0 || strcmp(argv[1],"ls") == 0)
     {
         printf("Opcion List seleccionada\n");
         req.comando = CMD_LIST;
     }
-    else if(strncmp(argv[1],"add",3) == 0)
+    else if(strncmp(argv[1],"add",3) == 0 || strcmp(argv[1],"a") == 0)
     {
         printf("Opcion escogida: ADD\n");
         req.comando = CMD_ADD;
@@ -69,7 +82,7 @@ int main(int argc, char **argv)
 
 
     }
-    else if(strncmp(argv[1],"run",3) == 0)
+    else if(strncmp(argv[1],"run",3) == 0 || strcmp(argv[1],"x") == 0)
     {
         if(argc< 3)
         {
@@ -81,7 +94,7 @@ int main(int argc, char **argv)
         int id_maped = atoi(argv[2]);
         req.task_id = id_maped;
     }
-    else if(strncmp(argv[1],"delete",6) == 0)
+    else if(strncmp(argv[1],"delete",6) == 0 || strcmp(argv[1],"rm") == 0)
     {
         if(argc< 3)
         {
@@ -95,6 +108,12 @@ int main(int argc, char **argv)
         //COMO INT EN LA STRUCT DE REQUEST
         int id_maped = atoi(argv[2]);
         req.task_id = id_maped;
+    }
+    else
+    {
+        printf("[ERROR] COMANDO NO VALIDO: %s\n", argv[1]);
+        printf("Usá './bin/taskctl help' para ver los comandos disponibles.\n");
+        exit(EXIT_FAILURE);
     }
 
     send_request(&req);
