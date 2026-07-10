@@ -68,3 +68,44 @@ PID: 0
 
 [FECHA 10/07/2026] [HORA: 11:39:27] [FD: 4] [STATUS: 0] [CMD: 108]-> [SALIDA][OK] Tarea añadida correctamente.
 
+[FECHA 10/07/2026] [HORA: 12:27:35] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA]----------------------
+ID: 1
+CMD: ls
+Intervalo: 900
+Estado: ESPERANDO
+PID: 0
+
+[FECHA 10/07/2026] [HORA: 12:28:01] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA][OK]Tarea eliminada de la lista correcrtamente.
+
+[FECHA 10/07/2026] [HORA: 12:28:45] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA]No hay tareas registradas ahora mismop.
+
+[FECHA 10/07/2026] [HORA: 12:28:51] [FD: 4] [STATUS: 0] [CMD: 108]-> [SALIDA][OK] Tarea añadida correctamente.
+
+[FECHA 10/07/2026] [HORA: 12:28:57] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA][OK]Tarea eliminada de la lista correcrtamente.
+
+[FECHA 10/07/2026] [HORA: 12:30:26] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA]No hay tareas registradas ahora mismop.
+
+[FECHA 10/07/2026] [HORA: 12:30:33] [FD: 4] [STATUS: 0] [CMD: 108]-> [SALIDA][OK] Tarea añadida correctamente.
+
+[FECHA 10/07/2026] [HORA: 12:30:35] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA]----------------------
+ID: 1
+CMD: ls -l
+Intervalo: 9000
+Estado: ESPERANDO
+PID: 1
+
+[FECHA 10/07/2026] [HORA: 12:30:38] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA][OK]Tarea eliminada de la lista correcrtamente.
+
+[FECHA 10/07/2026] [HORA: 12:30:41] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA]No hay tareas registradas ahora mismop.
+
+[FECHA 10/07/2026] [HORA: 12:30:50] [FD: 4] [STATUS: 0] [CMD: 108]-> [SALIDA][OK] Tarea añadida correctamente.
+
+[FECHA 10/07/2026] [HORA: 12:30:57] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA]----------------------
+ID: 1
+CMD: ls -l
+Intervalo: 9000
+Estado: ESPERANDO
+PID: 0
+
+[FECHA 10/07/2026] [HORA: 12:31:02] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA][OK]Tarea eliminada de la lista correcrtamente.
+

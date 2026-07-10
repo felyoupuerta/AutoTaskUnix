@@ -66,6 +66,7 @@ int main(int argc, char **argv)
         printf("Deseas añadir intervalo?(por defecto 5) si pones 0 se pondrá por defecto, si no debes poner un entero\n");
         fgets(buffer, sizeof(buffer), stdin);
 
+
         
         long valor = strtol(buffer,&end,10);
         if(*end != '\n' && *end != '\0')
@@ -102,10 +103,20 @@ int main(int argc, char **argv)
             printf("Ejemplo: ./bin/taskctl delete <ID-tarea>\n");
             exit(EXIT_FAILURE);
         }
+        char confirmacion[8] = {0};
+        printf("Estas seguro de que quieres eliminar la tarea con ID %s? (s/n): ", argv[2]);
+        fflush(stdout);
+        fgets(confirmacion,sizeof(confirmacion), stdin);
         
+        
+
+        if(confirmacion[0] != 's' && confirmacion[0] != 'S')
+        {
+            printf("Operacion Cancelada.\n");
+            exit(EXIT_SUCCESS);
+        }
+
         req.comando = CMD_DELETE;
-        //PASAMOS EL ID DE STRING A ENTERO PARA GUARDARLO 
-        //COMO INT EN LA STRUCT DE REQUEST
         int id_maped = atoi(argv[2]);
         req.task_id = id_maped;
     }
