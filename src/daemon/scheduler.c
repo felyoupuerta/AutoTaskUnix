@@ -129,22 +129,23 @@ int scheduler_add_task(Request *req)
 void scheduler_list_task(char *buffer, size_t size)
 {
     pthread_mutex_lock(&mutex);
-    
+
     buffer[0] = '\0';
     int cont_vacias = 0;
 
-    // 1. Añadir la cabecera alineada al inicio del buffer si hay espacio
+    // Cabecera
     char cabecera[256];
     snprintf(cabecera, sizeof(cabecera),
-        "%-4s %-25s %-10s %-12s %-6s\n"
-        "----------------------------------------------------------------------\n",
-        "ID", "COMANDO", "INTERVALO", "ESTADO", "PID"
+        "%-4s %-25s %-10s %-10s %-12s %-6s\n"
+        "--------------------------------------------------------------------------\n",
+        "ID", "COMANDO", "INTERVALO", "HORA", "ESTADO", "PID"
     );
+
     strncat(buffer, cabecera, size - strlen(buffer) - 1);
 
-    for(int i = 0; i < MAX_CL; i++)
+    for (int i = 0; i < MAX_CL; i++)
     {
-        if(lista_tareas[i].id == -1)
+        if (lista_tareas[i].id == -1)
         {
             cont_vacias++;
             continue;
@@ -153,26 +154,27 @@ void scheduler_list_task(char *buffer, size_t size)
         char temp[256];
 
         snprintf(temp, sizeof(temp),
-            "%-4d %-25s %-10d %-12s %-6d\n",
+            "%-4d %-25s %-10d %02d:%02d:%02d %-12s %-6d\n",
             lista_tareas[i].id,
             lista_tareas[i].cmd,
             lista_tareas[i].intervalo,
+            lista_tareas[i].h,
+            lista_tareas[i].m,
+            lista_tareas[i].s,
             state_to_text(lista_tareas[i].estado),
             lista_tareas[i].pid
         );
-        
+
         strncat(buffer, temp, size - strlen(buffer) - 1);
     }
-    
-    // 2. Si no había tareas, borramos la cabecera y mostramos el mensaje limpio
-    if(cont_vacias == MAX_CL)
+
+    if (cont_vacias == MAX_CL)
     {
         snprintf(buffer, size, "No hay tareas registradas ahora mismo.\n");
     }
 
     pthread_mutex_unlock(&mutex);
 }
-
 
 
 const char* state_to_text(TaskStatus estado)
