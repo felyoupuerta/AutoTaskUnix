@@ -15,25 +15,6 @@
 #include "client.h"
 
 
-/*ESTRUCTURA REQUEST
-
-typedef struct
-{
-    int task_id;
-    CmdType comando;
-    char cmd[M_BUFF_CMD];
-    int s_intervalo;
-} Request;
-
-typedef enum
-{
-     CMD_LIST,
-     CMD_ADD,
-     CMD_RUN
-} CmdType;
-
-*/
-
 int main(int argc, char **argv)
 {
     char command[M_BUFF_CMD] = {0};
@@ -72,7 +53,7 @@ int main(int argc, char **argv)
         printf("Deseas añadir intervalo?(por defecto 5) si pones 0 se pondrá por defecto, si no debes poner un entero\n");
         fgets(buffer, sizeof(buffer), stdin);
 
-        //VALIDAR QUE ES UN NU,ER CON STRTOL
+        
         long valor = strtol(buffer,&end,10);
         if(*end != '\n' && *end != '\0')
         {

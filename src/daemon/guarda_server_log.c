@@ -27,7 +27,7 @@ void open_serv_log(int cli_fd, int status,char cmd, const char *mensaje)
     {
         printf("[OK] Archivo de log abierto correctamente\n");
     }
-    //AÑADIR EL char cmd[M_BUFF_CMD]; PARA VER EXACTAMENTE QUE COMANDO SE AÑADIÓ
+
     fprintf(f, "[FECHA %02d/%02d/%02d] [HORA: %02d:%02d:%02d] [FD: %d] [STATUS: %d] [CMD: %d]-> [SALIDA]%s\n",
             infoTiempo->tm_mday,
             infoTiempo->tm_mon + 1,      // tm_mon va de 0 a 11

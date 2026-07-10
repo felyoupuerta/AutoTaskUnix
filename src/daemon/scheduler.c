@@ -13,7 +13,7 @@
 #include"scheduler.h"
 #include"server.h"
 
-//función env respuestas por socket cliente
+
 static void send_cliente(int cli_fd, int status, const char *mensaje);
 
 
@@ -124,10 +124,10 @@ int scheduler_add_task(Request *req)
 
 void scheduler_list_task(char *buffer, size_t size)
 {
-    //(void)req;
+    
 
     pthread_mutex_lock(&mutex);
-    //LIMPIAMOS EL BUFFER POR SI TIENE BASURA
+    
     buffer[0] = '\0';
     int cont_vacias = 0;
 
@@ -326,17 +326,7 @@ int scheduler_delete_task(Request *req)
 
     return rc;
 }
-/*
-typedef struct
-{
-    int id;
-    char cmd[M_BUFF_CMD];
-    int intervalo;
-    time_t last_run;
-    TaskStatus estado;
-    pid_t pid;
-} Task;
-*/
+
 int scheduler_comp_run(void)
 {
     pthread_mutex_lock(&mutex);
