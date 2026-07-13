@@ -93,40 +93,47 @@ int main(int argc, char **argv)
         strcpy(req.cmd,command);
         printf("Añadir hora exacta de ejecucion: \n");
         printf("\n > Hora: ");
-        scanf("%d",&hor);
-        if(hor >= 0 && hor <= 23)
+        if (fgets(buffer, sizeof(buffer), stdin) == NULL) exit(EXIT_FAILURE);
+        hor = strtol(buffer, &end, 10);
+        while (*end == ' ' || *end == '\t') end++;
+        if (*end != '\n' && *end != '\0')
         {
-            //NO HAGO NADA
+            printf("Error en la hora ingresada, debe ser un numero entre 0 y 23\n");
+            exit(EXIT_FAILURE);
         }
-        else
+        if (hor < 0 || hor > 23)
         {
             printf("Error en la hora ingresada, debe ser entre 0 y 23\n");
             exit(EXIT_FAILURE);
         }
         printf("\n > Minutos: ");
-        scanf("%d",&min);
-        if(min >= 0 && min <= 59)
+        if (fgets(buffer, sizeof(buffer), stdin) == NULL) exit(EXIT_FAILURE);
+        min = strtol(buffer, &end, 10);
+        while (*end == ' ' || *end == '\t') end++;
+        if (*end != '\n' && *end != '\0')
         {
-            //NO HAGO NADA
+            printf("Error en el minuto ingresado, debe ser un numero entre 0 y 59\n");
+            exit(EXIT_FAILURE);
         }
-        else
+        if (min < 0 || min > 59)
         {
             printf("Error en el minuto ingresado, debe estar entre el 0 y el 59\n");
             exit(EXIT_FAILURE);
         }
         printf("\n > Segundos: ");
-        scanf("%d",&sec);
-        if(sec >= 0 && sec <= 59)
+        if (fgets(buffer, sizeof(buffer), stdin) == NULL) exit(EXIT_FAILURE);
+        sec = strtol(buffer, &end, 10);
+        while (*end == ' ' || *end == '\t') end++;
+        if (*end != '\n' && *end != '\0')
         {
-            //NO HAGO NADA
+            printf("Error en los segundos ingresados, deben ser un numero entre 0 y 59\n");
+            exit(EXIT_FAILURE);
         }
-
-        else
+        if (sec < 0 || sec > 59)
         {
             printf("Error en los segundos ingresados, deben estar entre 0 y 59\n");
             exit(EXIT_FAILURE);
         }
-
         req.h = hor;
         req.m = min;
         req.s = sec;

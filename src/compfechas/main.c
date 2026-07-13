@@ -2,6 +2,11 @@
 /* PROGRAMA MAIN DE FECHAS                          */
 /* FELIPE ANGERIZ ESTEFANELL                        */
 /****************************************************/
+/*
+Este "programa" fue usdado para probar la comparatiuva de fecha hora m minutos y segundos
+que posteriormente se uitilizó algo similar para la ejecucion de tareas por HORA
+*/
+
 #include<stdio.h>
 #include<unistd.h>
 #include<time.h>

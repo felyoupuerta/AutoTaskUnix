@@ -16,7 +16,6 @@
 
 static void send_cliente(int cli_fd, int status, const char *mensaje);
 
-
 static Task lista_tareas[MAX_CL];
 static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
@@ -33,13 +32,15 @@ void scheduler_init(void)
         lista_tareas[i].last_run = 0;
         lista_tareas[i].pid = 0;
         lista_tareas[i].estado = ESTADO_ESPERANDO;
+        lista_tareas[i].tipo = TIPO_INTERVALO;
+        lista_tareas[i].h = 0;
+        lista_tareas[i].m = 0;
+        lista_tareas[i].s = 0;
     }
 
-    // 2. Intentar abrir el archivo tasks.conf para leer las tareas guardadas
     FILE *f = fopen(TASK_CONF, "r");
     if (f == NULL)
     {
-        // Si no existe, no es un error crítico; inicializamos por defecto y retornamos
         printf("[SERVER] El archivo %s no existe o no se pudo abrir. Inicialización limpia.\n", TASK_CONF);
         pthread_mutex_unlock(&mutex);
         return;
@@ -48,15 +49,36 @@ void scheduler_init(void)
     char linea[512];
     int i = 0;
     int intervalo;
+    int h, m, s;
     char cmd_aux[M_BUFF_CMD];
     while (fgets(linea, sizeof(linea), f) != NULL)
     {
         if (i >= MAX_CL) break;
-        // Analizar intervalo y comando
-        if (sscanf(linea, "%d:%[^\n]", &intervalo, cmd_aux) == 2)
+        if (linea[0] == '\n' || linea[0] == '\0')
+            continue;
+        if (strncmp(linea, "F:", 2) == 0 && sscanf(linea, "F:%d:%d:%d:%255[^\n]", &h, &m, &s, cmd_aux) == 4)
         {
             lista_tareas[i].id = i + 1;
+            lista_tareas[i].tipo = TIPO_FIJO;
+            lista_tareas[i].intervalo = 0;
+            lista_tareas[i].h = h;
+            lista_tareas[i].m = m;
+            lista_tareas[i].s = s;
+            strncpy(lista_tareas[i].cmd, cmd_aux, sizeof(lista_tareas[i].cmd) - 1);
+            lista_tareas[i].cmd[sizeof(lista_tareas[i].cmd) - 1] = '\0';
+            lista_tareas[i].estado = ESTADO_ESPERANDO;
+            lista_tareas[i].last_run = 0;
+            lista_tareas[i].pid = 0;
+            i++;
+        }
+        else if (sscanf(linea, "%d:%255[^\n]", &intervalo, cmd_aux) == 2)
+        {
+            lista_tareas[i].id = i + 1;
+            lista_tareas[i].tipo = TIPO_INTERVALO;
             lista_tareas[i].intervalo = intervalo;
+            lista_tareas[i].h = 0;
+            lista_tareas[i].m = 0;
+            lista_tareas[i].s = 0;
             strncpy(lista_tareas[i].cmd, cmd_aux, sizeof(lista_tareas[i].cmd) - 1);
             lista_tareas[i].cmd[sizeof(lista_tareas[i].cmd) - 1] = '\0';
             lista_tareas[i].estado = ESTADO_ESPERANDO;
@@ -136,9 +158,9 @@ void scheduler_list_task(char *buffer, size_t size)
     // Cabecera
     char cabecera[256];
     snprintf(cabecera, sizeof(cabecera),
-        "%-4s %-25s %-10s %-10s %-12s %-6s\n"
+        "%-4s %-25s %-15s %-12s %-6s\n"
         "--------------------------------------------------------------------------\n",
-        "ID", "COMANDO", "INTERVALO", "HORA", "ESTADO", "PID"
+        "ID", "COMANDO", "INFO", "ESTADO", "PID"
     );
 
     strncat(buffer, cabecera, size - strlen(buffer) - 1);
@@ -151,16 +173,25 @@ void scheduler_list_task(char *buffer, size_t size)
             continue;
         }
 
+        char info[32];
+
+        if (lista_tareas[i].tipo == TIPO_INTERVALO)
+        {
+            snprintf(info, sizeof(info), "cada %ds", lista_tareas[i].intervalo);
+        }
+        else if (lista_tareas[i].tipo == TIPO_FIJO)
+        {
+            snprintf(info, sizeof(info), "%02d:%02d:%02d",
+                lista_tareas[i].h, lista_tareas[i].m, lista_tareas[i].s);
+        }
+
         char temp[256];
 
         snprintf(temp, sizeof(temp),
-            "%-4d %-25s %-10d %02d:%02d:%02d %-12s %-6d\n",
+            "%-4d %-25s %-15s %-12s %-6d\n",
             lista_tareas[i].id,
             lista_tareas[i].cmd,
-            lista_tareas[i].intervalo,
-            lista_tareas[i].h,
-            lista_tareas[i].m,
-            lista_tareas[i].s,
+            info,
             state_to_text(lista_tareas[i].estado),
             lista_tareas[i].pid
         );
@@ -430,10 +461,12 @@ void guardar_tareas_en_archivo(void)
 
     for (int i = 0; i < MAX_CL; i++) 
     {
-        
         if (lista_tareas[i].id != -1)
         {
-            fprintf(fp, "%d:%s\n", lista_tareas[i].intervalo, lista_tareas[i].cmd);
+            if (lista_tareas[i].tipo == TIPO_FIJO)
+                fprintf(fp, "F:%02d:%02d:%02d:%s\n", lista_tareas[i].h, lista_tareas[i].m, lista_tareas[i].s, lista_tareas[i].cmd);
+            else
+                fprintf(fp, "%d:%s\n", lista_tareas[i].intervalo, lista_tareas[i].cmd);
         }
     }
 

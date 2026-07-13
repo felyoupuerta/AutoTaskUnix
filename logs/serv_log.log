@@ -239,3 +239,56 @@ PID: 0
 
 [FECHA 10/07/2026] [HORA: 19:50:15] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA][OK]Tarea eliminada de la lista correcrtamente.
 
+[FECHA 13/07/2026] [HORA: 09:27:12] [FD: 5] [STATUS: 0] [CMD: 105]-> [SALIDA][OK] Tarea añadida correctamente.
+
+[FECHA 13/07/2026] [HORA: 09:27:21] [FD: 3] [STATUS: 0] [CMD: 0]-> [SALIDA]ID   COMANDO                   INTERVALO  HORA       ESTADO       PID   
+--------------------------------------------------------------------------
+1    ip a                      5          00:00:00 ESPERANDO    1     
+
+[FECHA 13/07/2026] [HORA: 09:27:29] [FD: 3] [STATUS: 0] [CMD: 0]-> [SALIDA][OK]Tarea eliminada de la lista correcrtamente.
+
+[FECHA 13/07/2026] [HORA: 09:27:36] [FD: 3] [STATUS: 0] [CMD: 0]-> [SALIDA]No hay tareas registradas ahora mismo.
+
+[FECHA 13/07/2026] [HORA: 09:35:49] [FD: 4] [STATUS: 0] [CMD: 108]-> [SALIDA][OK] Tarea añadida correctamente.
+
+[FECHA 13/07/2026] [HORA: 09:38:19] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA]ID   COMANDO                   INTERVALO  HORA       ESTADO       PID   
+--------------------------------------------------------------------------
+1    ls -lrta                  0          09:35:00 ESPERANDO    0     
+
+[FECHA 13/07/2026] [HORA: 09:38:22] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA][OK]Tarea eliminada de la lista correcrtamente.
+
+[FECHA 13/07/2026] [HORA: 09:38:25] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA]No hay tareas registradas ahora mismo.
+
+[FECHA 13/07/2026] [HORA: 09:40:13] [FD: 3] [STATUS: 0] [CMD: 108]-> [SALIDA][OK] Tarea añadida correctamente.
+
+[FECHA 13/07/2026] [HORA: 09:40:15] [FD: 3] [STATUS: 0] [CMD: 0]-> [SALIDA]ID   COMANDO                   INTERVALO  HORA       ESTADO       PID   
+--------------------------------------------------------------------------
+1    ls -lrt                   900        00:00:00 ESPERANDO    1     
+
+[FECHA 13/07/2026] [HORA: 09:47:47] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA]ID   COMANDO                   INTERVALO  ESTADO       PID   
+--------------------------------------------------------------------------
+1    ls -lrt                   900        00:00:00 ESPERANDO    0     
+
+[FECHA 13/07/2026] [HORA: 09:48:10] [FD: 4] [STATUS: 0] [CMD: 105]-> [SALIDA][OK] Tarea añadida correctamente.
+
+[FECHA 13/07/2026] [HORA: 09:48:25] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA]ID   COMANDO                   INTERVALO  ESTADO       PID   
+--------------------------------------------------------------------------
+1    ls -lrt                   900        00:00:00 ESPERANDO    0     
+2    ip a                      0          19:48:21 ESPERANDO    1     
+
+[FECHA 13/07/2026] [HORA: 10:58:53] [FD: 4] [STATUS: 0] [CMD: 108]-> [SALIDA][OK] Tarea añadida correctamente.
+
+[FECHA 13/07/2026] [HORA: 10:58:59] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA]ID   COMANDO                   INFO            ESTADO       PID   
+--------------------------------------------------------------------------
+1    ls -lrt                   cada 900s       ESPERANDO    0     
+2    ip a                      19:48:21        ESPERANDO    0     
+3    ls -l                     11:00:00        ESPERANDO    1     
+
+[FECHA 13/07/2026] [HORA: 10:59:27] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA][OK]Tarea eliminada de la lista correcrtamente.
+
+[FECHA 13/07/2026] [HORA: 10:59:28] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA][OK]Tarea eliminada de la lista correcrtamente.
+
+[FECHA 13/07/2026] [HORA: 10:59:29] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA][OK]Tarea eliminada de la lista correcrtamente.
+
+[FECHA 13/07/2026] [HORA: 10:59:34] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA]No hay tareas registradas ahora mismo.
+
