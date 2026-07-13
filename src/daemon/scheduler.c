@@ -12,6 +12,7 @@
 #include<signal.h>
 #include"scheduler.h"
 #include"server.h"
+#include"errores.h"
 
 
 static void send_cliente(int cli_fd, int status, const char *mensaje);
@@ -140,11 +141,11 @@ int scheduler_add_task(Request *req)
             //ESCRIBIMOS EN EL TASKS.CONF LO ACTUAL
             guardar_tareas_en_archivo();
 
-            return 0;
+            return OP_OK;
         }
     }
     pthread_mutex_unlock(&mutex);
-    return -1;
+    return OP_SIN_ESPACIO_DISPONIBLE;
 }
 
 
@@ -234,7 +235,7 @@ void scheduler_run_task_stream(Request *req, int cli_fd)
 
      
     if (req->task_id < 0) {
-        send_cliente(cli_fd, -1, "[ERROR] El ID no puede ser negativo.\n");        
+        send_cliente(cli_fd, OP_ID_NEGATIVO, "[ERROR] El ID no puede ser negativo.\n");        
         return;
     }
     pthread_mutex_lock(&mutex);
@@ -253,30 +254,32 @@ void scheduler_run_task_stream(Request *req, int cli_fd)
 
     if(!found)
     {
-        send_cliente(cli_fd, -1, "[ERROR] Tarea no encontrada.\n");
+        send_cliente(cli_fd, OP_TAREA_NO_ENCONTRADA, "[ERROR] Tarea no encontrada.\n");
         return;
     }
 
     FILE *fp = popen(cmd_buf, "r");
     if(!fp)
     {
-        send_cliente(cli_fd, -1, "[ERROR] No se pudo iniciar la tarea.\n");
+        send_cliente(cli_fd, OP_FALLO_INICIO_TAREA, "[ERROR] No se pudo iniciar la tarea.\n");
         return;
     }
 
     char buff[M_BUFF_S_RESPONSE] = {0};
     while(fgets(buff, sizeof(buff), fp) != NULL)
     {
-        send_cliente(cli_fd, 0, buff);
+        send_cliente(cli_fd, OP_OK, buff);
         memset(buff, 0, sizeof(buff));
     }
 
     int rc = pclose(fp);
     char final_msg[128] = {0};
+    int final_status = OP_OK;
 
     if(rc == -1)
     {
         snprintf(final_msg, sizeof(final_msg), "[ERROR] Fallo al cerrar proceso.\n");
+        final_status = OP_FALLO_CIERRE_PROCESO;
     }
     else
     {
@@ -286,7 +289,7 @@ void scheduler_run_task_stream(Request *req, int cli_fd)
             snprintf(final_msg, sizeof(final_msg), "[OK] Tarea finalizada\n");
     }
 
-    send_cliente(cli_fd, 0, final_msg);
+    send_cliente(cli_fd, final_status, final_msg);
 
     pthread_mutex_lock(&mutex);
     for(int i = 0; i < MAX_CL; i++)
@@ -318,7 +321,7 @@ static void send_cliente(int cli_fd, int status, const char *mensaje)
 int scheduler_delete_task(Request *req)
 {
     pthread_mutex_lock(&mutex);
-    int rc = -1;
+    int rc = OP_TAREA_NO_ENCONTRADA;
     int i = 0;
 
 
@@ -331,7 +334,7 @@ int scheduler_delete_task(Request *req)
             lista_tareas[i].intervalo = -1;
             lista_tareas[i].last_run = 0;
             lista_tareas[i].pid = -1;
-            rc = 0;
+            rc = OP_OK;
             break;
         }
     }
@@ -389,7 +392,7 @@ int scheduler_comp_run(void)
                 printf("Proceso Hijo para ejecucion de comandos creado: [%d]\n",pid);
                 lista_tareas[i].pid = pid;
                 lista_tareas[i].estado = ESTADO_ESPERANDO;
-                resultado = 0;
+                resultado = OP_OK;
             }
         }
         
@@ -416,7 +419,7 @@ int scheduler_comp_run(void)
                 printf("Proceso Hijo para ejecucion de comandos creado: [%d]\n",pid);
                 lista_tareas[i].pid = pid;
                 lista_tareas[i].estado = ESTADO_ESPERANDO;
-                resultado = 0;
+                resultado = OP_OK;
             }
 
         }
@@ -451,4 +454,63 @@ void guardar_tareas_en_archivo(void)
 
     fclose(fp);
     printf("[SERVER] Archivo %s actualizado con éxito.\n", TASK_CONF);
+}
+
+const char* tipo_to_text(TaskType tipo)
+{
+    switch(tipo)
+    {
+        case TIPO_INTERVALO:
+            return "INTERVALO";
+        case TIPO_FIJO:
+            return "FIJO";
+        default:
+            return "DESCONOCIDO";
+    }
+}
+
+
+void scheduler_estado_tarea(Request *req,char *buffer,size_t size)
+{
+    pthread_mutex_lock(&mutex);
+
+    int i = 0;
+    int encontrada = 0;
+
+    for(i = 0;i < MAX_CL;i++)
+    {
+        if(lista_tareas[i].id == req->task_id)
+        {
+
+            snprintf(buffer, size,
+                "ID: %d\n"
+                "Comando: %s\n"
+                "Intervalo: %d\n"
+                "Ultima Ejecucion: %ld\n"
+                "PID: %d\n"
+                "TIPO DE TAREA: %s\n"
+                "ESTADO. %s\n"
+                "HORA DE EJECUCION: %d:%d:%d"
+                ,
+                lista_tareas[i].id,
+                lista_tareas[i].cmd,
+                lista_tareas[i].intervalo,
+                lista_tareas[i].last_run,
+                lista_tareas[i].pid,
+                tipo_to_text(lista_tareas[i].tipo),
+                state_to_text(lista_tareas[i].estado),
+                lista_tareas[i].h,
+                lista_tareas[i].m,
+                lista_tareas[i].s
+            );
+            encontrada = 1;
+            break;
+        }
+    }
+    if(!encontrada)
+    {
+        snprintf(buffer, size, "No se encontró ninguna tarea con ese ID.\n");
+    }
+    
+    pthread_mutex_unlock(&mutex);
 }

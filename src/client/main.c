@@ -13,6 +13,7 @@
 #include "config.h"
 #include "protocol.h"
 #include "client.h"
+#include "errores.h"
 
 
 int main(int argc, char **argv)
@@ -45,7 +46,7 @@ int main(int argc, char **argv)
         printf("----------------------------------------------------------------\n");
         printf("Usar: './bin/taskctl help' para ver la ayuda detallada.\n"         );
         printf("================================================================\n");
-        exit(argc < 2 ? EXIT_FAILURE : EXIT_SUCCESS);
+        exit(argc < 2 ? EC_FALTA_ARGUMENTO : EC_OK);
     }
 
 
@@ -95,48 +96,48 @@ int main(int argc, char **argv)
         fflush(stdout);
         printf("\n > Hora: ");
         fflush(stdout);
-        if (fgets(buffer, sizeof(buffer), stdin) == NULL) exit(EXIT_FAILURE);
+        if (fgets(buffer, sizeof(buffer), stdin) == NULL) exit(EC_ERROR_LECTURA);
         hor = strtol(buffer, &end, 10);
         while (*end == ' ' || *end == '\t') end++;
         if (*end != '\n' && *end != '\0')
         {
             printf("Error en la hora ingresada, debe ser un numero entre 0 y 23\n");
-            exit(EXIT_FAILURE);
+            exit(EC_NUMERO_INVALIDO);
         }
         if (hor < 0 || hor > 23)
         {
             printf("Error en la hora ingresada, debe ser entre 0 y 23\n");
-            exit(EXIT_FAILURE);
+            exit(EC_NUMERO_INVALIDO);
         }
         printf("\n > Minutos: ");
         fflush(stdout);
-        if (fgets(buffer, sizeof(buffer), stdin) == NULL) exit(EXIT_FAILURE);
+        if (fgets(buffer, sizeof(buffer), stdin) == NULL) exit(EC_ERROR_LECTURA);
         min = strtol(buffer, &end, 10);
         while (*end == ' ' || *end == '\t') end++;
         if (*end != '\n' && *end != '\0')
         {
             printf("Error en el minuto ingresado, debe ser un numero entre 0 y 59\n");
-            exit(EXIT_FAILURE);
+            exit(EC_NUMERO_INVALIDO);
         }
         if (min < 0 || min > 59)
         {
             printf("Error en el minuto ingresado, debe estar entre el 0 y el 59\n");
-            exit(EXIT_FAILURE);
+            exit(EC_NUMERO_INVALIDO);
         }
         printf("\n > Segundos: ");
         fflush(stdout);
-        if (fgets(buffer, sizeof(buffer), stdin) == NULL) exit(EXIT_FAILURE);
+        if (fgets(buffer, sizeof(buffer), stdin) == NULL) exit(EC_ERROR_LECTURA);
         sec = strtol(buffer, &end, 10);
         while (*end == ' ' || *end == '\t') end++;
         if (*end != '\n' && *end != '\0')
         {
             printf("Error en los segundos ingresados, deben ser un numero entre 0 y 59\n");
-            exit(EXIT_FAILURE);
+            exit(EC_NUMERO_INVALIDO);
         }
         if (sec < 0 || sec > 59)
         {
             printf("Error en los segundos ingresados, deben estar entre 0 y 59\n");
-            exit(EXIT_FAILURE);
+            exit(EC_NUMERO_INVALIDO);
         }
         req.h = hor;
         req.m = min;
@@ -149,7 +150,7 @@ int main(int argc, char **argv)
         {
             printf("Falta el argumento de el ID\n");
             printf("Ejemplo: ./bin/taskctl run <ID>\n");
-            exit(EXIT_FAILURE);
+            exit(EC_FALTA_ARGUMENTO);
         }
         req.comando = CMD_RUN;
         int id_maped = atoi(argv[2]);
@@ -157,7 +158,7 @@ int main(int argc, char **argv)
         if (id_maped < 0)
         {
             printf("[ERROR] El ID no puede ser negativo.\n");
-            exit(EXIT_FAILURE);
+            exit(EC_ID_INVALIDO);
         }
 
         req.task_id = id_maped;
@@ -168,7 +169,7 @@ int main(int argc, char **argv)
         {
             printf("Falta el argumento de el ID\n");
             printf("Ejemplo: ./bin/taskctl delete <ID-tarea>\n");
-            exit(EXIT_FAILURE);
+            exit(EC_FALTA_ARGUMENTO);
         }
         char confirmacion[8] = {0};
         printf("Estas seguro de que quieres eliminar la tarea con ID %s? (s/n): ", argv[2]);
@@ -180,18 +181,32 @@ int main(int argc, char **argv)
         if(confirmacion[0] != 's' && confirmacion[0] != 'S')
         {
             printf("Operacion Cancelada.\n");
-            exit(EXIT_SUCCESS);
+            exit(EC_OK);
         }
 
         req.comando = CMD_DELETE;
         int id_maped = atoi(argv[2]);
         req.task_id = id_maped;
     }
+    else if(strncmp(argv[1],"status",6) == 0 || strcmp(argv[1],"st") == 0)
+    {
+        if(argc<3)
+        {
+            printf("Falta el argumento de el ID\n");
+            printf("Ejemplo: ./bin/taskctl status <ID>\n");
+            exit(EC_FALTA_ARGUMENTO);
+        }
+
+        int id_searched = 0;
+        id_searched = atoi(argv[2]);
+        req.comando = CMD_STATUS;
+        req.task_id = id_searched;
+    }
     else
     {
         printf("[ERROR] COMANDO NO VALIDO: %s\n", argv[1]);
         printf("Usá './bin/taskctl help' para ver los comandos disponibles.\n");
-        exit(EXIT_FAILURE);
+        exit(EC_COMANDO_DESCONOCIDO);
     }
 
     int rc = send_request(&req);

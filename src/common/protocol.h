@@ -18,7 +18,8 @@ typedef enum
     CMD_LIST,
     CMD_ADD,
     CMD_RUN,
-    CMD_DELETE
+    CMD_DELETE,
+    CMD_STATUS
 } CmdType;
 
 typedef struct

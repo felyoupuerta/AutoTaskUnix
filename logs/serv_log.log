@@ -317,3 +317,47 @@ PID: 0
 
 [FECHA 13/07/2026] [HORA: 11:40:42] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA][OK]Tarea eliminada de la lista correcrtamente.
 
+[FECHA 13/07/2026] [HORA: 13:51:40] [FD: 5] [STATUS: 0] [CMD: 0]-> [SALIDA]ID   COMANDO                   INFO            ESTADO       PID   
+--------------------------------------------------------------------------
+1    ls                        cada 999s       ESPERANDO    1238  
+
+[FECHA 13/07/2026] [HORA: 13:54:59] [FD: 3] [STATUS: 0] [CMD: 0]-> [SALIDA]ID   COMANDO                   INFO            ESTADO       PID   
+--------------------------------------------------------------------------
+1    ls                        cada 999s       ESPERANDO    1407  
+
+[FECHA 13/07/2026] [HORA: 13:55:02] [FD: 3] [STATUS: 0] [CMD: 0]-> [SALIDA]ID: 1
+Comando: ls
+Intervalo: 999
+Ultima Ejecucion: 1783943693
+PID: 1407
+TIPO DE TAREA: INTERVALO
+ESTADO. ESPERANDO
+HORA DE EJECUCION: 0:0:0
+[FECHA 13/07/2026] [HORA: 13:56:15] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA]ID   COMANDO                   INFO            ESTADO       PID   
+--------------------------------------------------------------------------
+1    ls                        cada 999s       ESPERANDO    1483  
+
+[FECHA 13/07/2026] [HORA: 13:56:19] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA]ID: 1
+Comando: ls
+Intervalo: 999
+Ultima Ejecucion: 1783943774
+PID: 1483
+TIPO DE TAREA: INTERVALO
+ESTADO. ESPERANDO
+HORA DE EJECUCION: 0:0:0
+[FECHA 13/07/2026] [HORA: 13:58:56] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA]ID: 1
+Comando: ls
+Intervalo: 999
+Ultima Ejecucion: 1783943926
+PID: 1568
+TIPO DE TAREA: INTERVALO
+ESTADO. ESPERANDO
+HORA DE EJECUCION: 0:0:0
+[FECHA 13/07/2026] [HORA: 13:59:04] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA]ID: 1
+Comando: ls
+Intervalo: 999
+Ultima Ejecucion: 1783943926
+PID: 1568
+TIPO DE TAREA: INTERVALO
+ESTADO. ESPERANDO
+HORA DE EJECUCION: 0:0:0

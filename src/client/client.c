@@ -12,6 +12,7 @@
 #include "config.h"
 #include "protocol.h"
 #include "client.h"
+#include "errores.h"
 
 int send_request(Request *req)
 {
@@ -22,7 +23,7 @@ int send_request(Request *req)
     if(fd_sck < 0)
     {
         perror("[ERROR] ERROR CONFIGURANDO EL SOCKET");
-        exit(EXIT_FAILURE);
+        exit(EC_ERROR_CONEXION);
     }
     
     struct sockaddr_un addr = {0};
@@ -39,7 +40,7 @@ int send_request(Request *req)
     {
         perror("[ERROR] ERROR AL CONECTAR AL SOCKET");
         close(fd_sck);
-        exit(EXIT_FAILURE);
+        exit(EC_ERROR_CONEXION);
     }
     
     if(write(fd_sck,req,sizeof(Request)) < 0)
@@ -47,14 +48,14 @@ int send_request(Request *req)
         
         perror("[ERROR] ERROR AL ENVIAR DATOS POR EL SOCKET");
         close(fd_sck);
-        exit(EXIT_FAILURE);
+        exit(EC_ERROR_CONEXION);
     }
     
     
     Response resp = {0};
 
     ssize_t n;
-    int ultimo_status = 0;
+    int ultimo_status = OP_OK;
     while((n = read(fd_sck, &resp, sizeof(Response))) > 0)
     {
         
