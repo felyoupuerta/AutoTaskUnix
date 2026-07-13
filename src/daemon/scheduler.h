@@ -36,30 +36,14 @@ typedef struct
 
 
 void scheduler_init(void);
-
-
 void* scheduler_loop(void* arg);
-
-
 int scheduler_add_task(Request *req);
 void scheduler_list_task(char *buffer, size_t size);
-
-
 const char* state_to_text(TaskStatus estado);
-
-
 void scheduler_run_task(Request *req);
-
-
 void scheduler_run_task_stream(Request *req, int cli_fd);
-
-
 int scheduler_delete_task(Request *req);
-
-
 int scheduler_comp_run(void);
-
-
 void guardar_tareas_en_archivo(void);
 
 

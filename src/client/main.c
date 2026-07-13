@@ -92,7 +92,9 @@ int main(int argc, char **argv)
         command[strcspn(command, "\n")] = 0;
         strcpy(req.cmd,command);
         printf("Añadir hora exacta de ejecucion: \n");
+        fflush(stdout);
         printf("\n > Hora: ");
+        fflush(stdout);
         if (fgets(buffer, sizeof(buffer), stdin) == NULL) exit(EXIT_FAILURE);
         hor = strtol(buffer, &end, 10);
         while (*end == ' ' || *end == '\t') end++;
@@ -107,6 +109,7 @@ int main(int argc, char **argv)
             exit(EXIT_FAILURE);
         }
         printf("\n > Minutos: ");
+        fflush(stdout);
         if (fgets(buffer, sizeof(buffer), stdin) == NULL) exit(EXIT_FAILURE);
         min = strtol(buffer, &end, 10);
         while (*end == ' ' || *end == '\t') end++;
@@ -121,6 +124,7 @@ int main(int argc, char **argv)
             exit(EXIT_FAILURE);
         }
         printf("\n > Segundos: ");
+        fflush(stdout);
         if (fgets(buffer, sizeof(buffer), stdin) == NULL) exit(EXIT_FAILURE);
         sec = strtol(buffer, &end, 10);
         while (*end == ' ' || *end == '\t') end++;
@@ -149,6 +153,13 @@ int main(int argc, char **argv)
         }
         req.comando = CMD_RUN;
         int id_maped = atoi(argv[2]);
+
+        if (id_maped < 0)
+        {
+            printf("[ERROR] El ID no puede ser negativo.\n");
+            exit(EXIT_FAILURE);
+        }
+
         req.task_id = id_maped;
     }
     else if(strncmp(argv[1],"delete",6) == 0 || strcmp(argv[1],"rm") == 0)

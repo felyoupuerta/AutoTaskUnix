@@ -292,3 +292,28 @@ PID: 0
 
 [FECHA 13/07/2026] [HORA: 10:59:34] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA]No hay tareas registradas ahora mismo.
 
+[FECHA 13/07/2026] [HORA: 11:36:19] [FD: 4] [STATUS: 0] [CMD: 108]-> [SALIDA][OK] Tarea añadida correctamente.
+
+[FECHA 13/07/2026] [HORA: 11:36:22] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA]ID   COMANDO                   INFO            ESTADO       PID   
+--------------------------------------------------------------------------
+1    ls                        cada 999s       ESPERANDO    650   
+
+[FECHA 13/07/2026] [HORA: 11:38:37] [FD: 4] [STATUS: 0] [CMD: 105]-> [SALIDA][OK] Tarea añadida correctamente.
+
+[FECHA 13/07/2026] [HORA: 11:40:17] [FD: 4] [STATUS: 0] [CMD: 105]-> [SALIDA][OK] Tarea añadida correctamente.
+
+[FECHA 13/07/2026] [HORA: 11:40:22] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA]ID   COMANDO                   INFO            ESTADO       PID   
+--------------------------------------------------------------------------
+1    ls                        cada 999s       ESPERANDO    725   
+2    ip a                      11:40:00        ESPERANDO    726   
+3    ip a                      11:40:00        ESPERANDO    0     
+
+[FECHA 13/07/2026] [HORA: 11:40:30] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA][OK]Tarea eliminada de la lista correcrtamente.
+
+[FECHA 13/07/2026] [HORA: 11:40:37] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA]ID   COMANDO                   INFO            ESTADO       PID   
+--------------------------------------------------------------------------
+1    ls                        cada 999s       ESPERANDO    725   
+3    ip a                      11:40:00        ESPERANDO    0     
+
+[FECHA 13/07/2026] [HORA: 11:40:42] [FD: 4] [STATUS: 0] [CMD: 0]-> [SALIDA][OK]Tarea eliminada de la lista correcrtamente.
+

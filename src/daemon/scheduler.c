@@ -133,7 +133,7 @@ int scheduler_add_task(Request *req)
             lista_tareas[i].intervalo = req->s_intervalo;
             lista_tareas[i].last_run = 0;
             lista_tareas[i].estado = ESTADO_ESPERANDO;
-            lista_tareas[i].pid++;
+            lista_tareas[i].pid = 0;
 
             pthread_mutex_unlock(&mutex);
 
@@ -227,38 +227,16 @@ const char* state_to_text(TaskStatus estado)
 }
 
 
-
-void scheduler_run_task(Request *req)
-{
-    pthread_mutex_lock(&mutex);
-
-    for(int i = 0; i < MAX_CL; i++)
-    {
-        if(lista_tareas[i].id != -1 &&
-           lista_tareas[i].id == req->task_id)
-        {
-            printf("TAREA -----> %s\n",
-                   lista_tareas[i].cmd);
-
-            printf("Ejecutando Tarea con ID: %d\n",
-                   lista_tareas[i].id);
-            system(lista_tareas[i].cmd);
-
-            lista_tareas[i].estado = ESTADO_RUNNING;
-
-            fflush(stdout);
-            break;
-        }
-    }
-
-    pthread_mutex_unlock(&mutex);
-} 
-
 void scheduler_run_task_stream(Request *req, int cli_fd)
 {
     char cmd_buf[M_BUFF_CMD + 32] = {0};
     int found = 0;
 
+     
+    if (req->task_id < 0) {
+        send_cliente(cli_fd, -1, "[ERROR] El ID no puede ser negativo.\n");        
+        return;
+    }
     pthread_mutex_lock(&mutex);
     for(int i = 0; i < MAX_CL; i++)
     {
@@ -409,7 +387,7 @@ int scheduler_comp_run(void)
                 }
                 printf("\n\n");
                 printf("Proceso Hijo para ejecucion de comandos creado: [%d]\n",pid);
-
+                lista_tareas[i].pid = pid;
                 lista_tareas[i].estado = ESTADO_ESPERANDO;
                 resultado = 0;
             }
@@ -436,6 +414,7 @@ int scheduler_comp_run(void)
                 }
                 printf("\n\n");
                 printf("Proceso Hijo para ejecucion de comandos creado: [%d]\n",pid);
+                lista_tareas[i].pid = pid;
                 lista_tareas[i].estado = ESTADO_ESPERANDO;
                 resultado = 0;
             }
